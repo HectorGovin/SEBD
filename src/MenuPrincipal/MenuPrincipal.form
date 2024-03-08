@@ -401,6 +401,9 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="COBRO R&#xc1;PIDO"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_CobroRapidoMouseClicked"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel_Subtotal">
                       <Properties>
