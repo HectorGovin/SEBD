@@ -4,48 +4,24 @@ import java.awt.event.KeyEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.JOptionPane;
+import java.util.Calendar;
+import java.text.*;
 
 public class MenuPrincipal extends javax.swing.JFrame {
     
     String[][] PRODUCTOS = new String[50][9];
-    int contador;
+    int contadorProd;
     int i = 0;
-    String xd;
     
     public static final String URL = "jdbc:mysql://localhost:3306/sebd";
     public static final String USERNAME = "root";
     public static final String PASSWORD = "";
     
-    DefaultTableModel modelo;
-    
     public MenuPrincipal() {
         initComponents();
         this.setExtendedState(this.MAXIMIZED_BOTH);
         CargarTabla();
-    }
-    
-    private void CargarTabla(){
-        tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
-        PRODUCTOS,
-        new String [] {
-            "COD DE BARRAS", "SERIE", "DESCRIPCION", "CATEGORIA", "U.M", "$ GENERAL", "$ TECNICO", "CANTIDAD"
-        }
-        ));
-        
-        TableColumn c;
-        c = tablaPRODUCTOS.getColumnModel().getColumn(0);
-        c.setMaxWidth(120); c.setMinWidth(120); c.setResizable(false); 
-        c = tablaPRODUCTOS.getColumnModel().getColumn(1);
-        c.setMaxWidth(70); c.setMinWidth(70); c.setResizable(false); 
-        c = tablaPRODUCTOS.getColumnModel().getColumn(2);
-        c.setPreferredWidth(400);
-        c = tablaPRODUCTOS.getColumnModel().getColumn(3);
-        c.setMaxWidth(80); c.setMinWidth(80); c.setResizable(false); 
-        for(int cx = 4; cx<8;cx++){
-            c = tablaPRODUCTOS.getColumnModel().getColumn(cx);
-            c.setMaxWidth(80); c.setMinWidth(80); c.setResizable(false); 
-        }
-        ConsultaFolio();
+        EstablecerFecha();
     }
     
     public static Connection getConection(){
@@ -59,30 +35,58 @@ public class MenuPrincipal extends javax.swing.JFrame {
         return con;
     }
     
+    private void EstablecerFecha(){
+        SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Calendar c = Calendar.getInstance();
+        String date = DateFormat.format(c.getTime());
+        jLabel_FechaHora.setText(date);
+    }
+    
+    private void CargarTabla(){
+        tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
+        PRODUCTOS,
+        new String [] {
+            "COD DE BARRAS", "SERIE", "DESCRIPCION", "CATEGORIA", "U.M", "$ GENERAL", "$ TECNICO", "CANTIDAD"
+        }
+        ));
+        TableColumn c;
+        c = tablaPRODUCTOS.getColumnModel().getColumn(0);
+        c.setMaxWidth(120); c.setMinWidth(120); c.setResizable(false); 
+        c = tablaPRODUCTOS.getColumnModel().getColumn(1);
+        c.setMaxWidth(70); c.setMinWidth(70); c.setResizable(false); 
+        c = tablaPRODUCTOS.getColumnModel().getColumn(2);
+        c.setPreferredWidth(400);
+        c = tablaPRODUCTOS.getColumnModel().getColumn(3);
+        c.setMaxWidth(80); c.setMinWidth(80); c.setResizable(false); 
+        for(int cx = 4; cx<8;cx++){
+            c = tablaPRODUCTOS.getColumnModel().getColumn(cx);
+            c.setMaxWidth(80); c.setMinWidth(80); c.setResizable(false); 
+        }
+        float sum = 0;
+        for(int x=0; PRODUCTOS[x][8]!=null; x++){
+            sum+= Float.parseFloat(PRODUCTOS[x][8]);
+        }
+        jTextField_Total.setText(""+sum);
+        ConsultaFolio();
+    }
+    
     private void PR(){
         String cod = jTextField_Producto.getText();
         
         if(PRODUCTOS[0][0] != null){
-                System.out.println("\nvalor de i: " + i);
                 for(int x = 0; PRODUCTOS [x][0] != null; x++){
-                    System.out.println("Dato entra a ciclo for");
                     if(PRODUCTOS[x][0].equals(cod)){
-                        System.out.println("Dato entra a ciclo if");
                         PRODUCTOS[x][7] = "" + (Integer.parseInt(PRODUCTOS[x][7]) + 1);
-                        PR_DB(x);
-                        break;
+                        PR_DB(x); break;
                     }else if(PRODUCTOS[x + 1][0] == null){
-                        System.out.println("Dato entra a ciclo else-if");
-                        i++;
-                        PRODUCTOS[i][7] = ("" + 1);
-                        PR_DB(i);
-                        break;
+                        contadorProd++;
+                        PRODUCTOS[contadorProd][7] = ("" + 1);
+                        PR_DB(contadorProd); break;
                     }
                 }
             }else{
-                System.out.println("Primer dato introducido a la tabla (linea 97)\n");
-                i=0;
-                PRODUCTOS[i][7] = ("" + 1);
+                contadorProd=0;
+                PRODUCTOS[contadorProd][7] = ("" + 1);
                 PR_DB(i);
             }
     }
@@ -92,18 +96,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         try{
             Connection con = null;
             con = getConection();
-            
             PreparedStatement ps;
-            ResultSet res;            
-            
+            ResultSet res;
             ps = con.prepareStatement("SELECT * FROM PRODUCTOS");
-            res = ps.executeQuery();
+            res = ps.executeQuery(); int ow = 0;
             if(res.next()){
-                id=res.getString("ID_PROD");
+                ow = res.getInt("ID_PROD");
             }
-            
-            jLabel_Folio.setText(id);
-            System.out.println(id);
+            String s = String.format("%04d", ow);
+            jLabel_Folio.setText(s);
             
         } catch(Exception ex){
             JOptionPane.showMessageDialog(null, "No se pudo mostrar la tabla, error: "+ex.toString());
@@ -111,20 +112,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
     
     private void PR_DB(int m){
-        
         String cod = jTextField_Producto.getText();
-        
         try{
-            
             Connection con = null;
             con = getConection();
-            
             PreparedStatement ps;
-            ResultSet res;            
-            
+            ResultSet res;
             ps = con.prepareStatement("SELECT * FROM PRODUCTOS WHERE CODIGO_PROD = '" + cod + "'");
             res = ps.executeQuery();
-            
             while(res.next()){
                 PRODUCTOS[m][0] = ("" + res.getString("CODIGO_PROD"));
                 PRODUCTOS[m][1] = ("" + res.getString("SERIE_PROD"));
@@ -134,22 +129,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 PRODUCTOS[m][5] = ("" + res.getString("PRG_PROD"));
                 PRODUCTOS[m][6] = ("" + res.getString("PRT_PROD"));
             }
-            
-            System.out.println("Se hizo un registro en la posicion: " + m + "\n");
-            
+            PRODUCTOS[m][8] = ""+(Float.parseFloat(PRODUCTOS[m][5]) * Float.parseFloat(PRODUCTOS[m][7]));
             CargarTabla();
-            
-            /*System.out.println(i);
-            System.out.println(PRODUCTOS[i][0]); 
-            System.out.println(PRODUCTOS[0][0]); 
-            System.out.println(PRODUCTOS[1][0]); 
-            System.out.println(PRODUCTOS[2][0]);System.out.println(" "); i++;*/
-            
         }catch(SQLException e){
             System.out.println(e);
         }
     }
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -183,6 +168,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel_Impuesto = new javax.swing.JLabel();
         jTextField_Impuesto = new javax.swing.JTextField();
         jTextField_Total = new javax.swing.JTextField();
+        jButton_Modificar = new javax.swing.JButton();
+        jButton_ELIMINAR = new javax.swing.JButton();
         jLabel_Folio_S = new javax.swing.JLabel();
         jLabel_Folio = new javax.swing.JLabel();
         jButton_AñadirProducto = new javax.swing.JButton();
@@ -285,7 +272,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jTextField_Impuesto.setEnabled(false);
 
         jTextField_Total.setEditable(false);
-        jTextField_Total.setEnabled(false);
+        jTextField_Total.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jTextField_Total.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        jButton_Modificar.setBackground(new java.awt.Color(255, 153, 51));
+        jButton_Modificar.setText("MODIFICAR");
+
+        jButton_ELIMINAR.setBackground(new java.awt.Color(204, 0, 0));
+        jButton_ELIMINAR.setForeground(new java.awt.Color(255, 255, 255));
+        jButton_ELIMINAR.setText("ELIMINAR");
 
         javax.swing.GroupLayout jPanel_FAS_AND_BOTTOMLayout = new javax.swing.GroupLayout(jPanel_FAS_AND_BOTTOM);
         jPanel_FAS_AND_BOTTOM.setLayout(jPanel_FAS_AND_BOTTOMLayout);
@@ -301,6 +296,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
                         .addComponent(jButton_Ferreteria)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_Servicios)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_Modificar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_ELIMINAR)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
                         .addComponent(jButton_VentasHoy, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -329,7 +328,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Ferreteria)
                     .addComponent(jButton_AireAcondicionado)
-                    .addComponent(jButton_Servicios))
+                    .addComponent(jButton_Servicios)
+                    .addComponent(jButton_Modificar)
+                    .addComponent(jButton_ELIMINAR))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -490,8 +491,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void jTextField_ProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ProductoKeyReleased
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             PR();
-            jTextField_Producto.setText("");
-            }
+            jTextField_Producto.setText("");}
     }//GEN-LAST:event_jTextField_ProductoKeyReleased
 
     private void jButton_FerreteriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_FerreteriaMouseClicked
@@ -546,7 +546,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton_AñadirProducto;
     private javax.swing.JButton jButton_CobroClienteU;
     private javax.swing.JButton jButton_CobroRapido;
+    private javax.swing.JButton jButton_ELIMINAR;
     private javax.swing.JButton jButton_Ferreteria;
+    private javax.swing.JButton jButton_Modificar;
     private javax.swing.JButton jButton_Servicios;
     private javax.swing.JButton jButton_VentasHoy;
     private javax.swing.JLabel jLabel_FH_S;
