@@ -5,7 +5,10 @@
 package MenuPrincipal;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -15,10 +18,18 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ModificarProductos extends javax.swing.JFrame {
     
+    
+    
     public void guardar(){
         Productos ObjetoProductos = new Productos();
         ObjetoProductos.InsertarProducto(jTextField_CB, jTextField_Serie, jComboBox_Categoria, jTextField_UM, jTextArea1, jTextField_PG, jTextField_PT, jTextField_DIM, jTextField_STOCK);
     }
+    
+    public void recibirDatos(int row, String value){
+        Productos ObjetoProductos = new Productos();
+        ObjetoProductos.ModificarProducto(value, jTextField_CB, jTextField_Serie, jComboBox_Categoria, jTextField_UM, jTextArea1, jTextField_PG, jTextField_PT, jTextField_DIM, jTextField_STOCK);
+    }
+    
     
     /*public void actualizar(){
         DefaultTableModel model = (DefaultTableModel)consultasProductos.tablaPRODUCTOS.getModel();
@@ -33,6 +44,16 @@ public class ModificarProductos extends javax.swing.JFrame {
     public ModificarProductos() {
         initComponents();
         this.setLocationRelativeTo(null);
+        jTextField_ID = new javax.swing.JTextField();
+        jTextField_CB = new javax.swing.JTextField();
+        jTextField_Serie = new javax.swing.JTextField();
+        jComboBox_Categoria = new javax.swing.JComboBox();
+        jTextField_UM = new javax.swing.JTextField();
+        jTextArea1 = new javax.swing.JTextArea();
+        jTextField_PG = new javax.swing.JTextField();
+        jTextField_PT = new javax.swing.JTextField();
+        jTextField_DIM = new javax.swing.JTextField();
+        jTextField_STOCK = new javax.swing.JTextField();
     }
     
 
@@ -105,6 +126,7 @@ public class ModificarProductos extends javax.swing.JFrame {
         jPanel_ID.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(171, 171, 171), 1, true), "ID"));
 
         jTextField_ID.setEditable(false);
+        jTextField_ID.setEnabled(false);
 
         javax.swing.GroupLayout jPanel_IDLayout = new javax.swing.GroupLayout(jPanel_ID);
         jPanel_ID.setLayout(jPanel_IDLayout);
@@ -411,7 +433,7 @@ public class ModificarProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_CancelarMouseClicked
 
     private void jButton_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuardarActionPerformed
-        guardar();
+    guardar();
     }//GEN-LAST:event_jButton_GuardarActionPerformed
 
     /**

@@ -12,6 +12,7 @@ import javax.swing.JTable;
 import javax.swing.JComboBox;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import static javax.swing.UIManager.getString;
 import static javax.swing.UIManager.getInt;
@@ -231,6 +232,53 @@ public class Productos {
             }
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null, "Error de seleccion, error: "+ex.toString());
+        }
+    }
+    
+    
+    public void ModificarProducto(String paramID, JTextField paramCB, JTextField paramSerie, JComboBox paramCat, JTextField paramUM, JTextArea paramDes, JTextField paramPRG, JTextField paramPRT, JTextField paramDIM, JTextField paramStock){
+        
+        setID_PROD(Integer.parseInt(paramID));
+        setCODIGO_PROD(paramCB.getText());
+        setSERIE_PROD(paramSerie.getText());
+        setCAT_PROD(""+paramCat.getSelectedItem());
+        setUM_PROD(paramUM.getText());
+        setDES_PROD(paramDes.getText());
+        double PRGDouble = Double.parseDouble(paramPRG.getText());
+        setPRG_PROD(PRGDouble);
+        double PRTDouble = Double.parseDouble(paramPRT.getText());
+        setPRT_PROD(PRTDouble);
+        setDIM_PROD(paramDIM.getText());
+        int STOCKInt = Integer.parseInt(paramStock.getText());
+        setSTOCK_PROD(STOCKInt);
+        
+        Conexion objetoConexion = new Conexion();
+        
+        String consulta = "UPDATE productos SET CODIGO_PROD=?, SERIE_PROD=?, CAT_PROD=?, UM_PROD=?, DES_PROD=?, PRG_PROD=?, PRT_PROD=?, DIM_PROD=?, STOCK_PROD=? WHERE ID_PROD=?;";
+        
+        try{
+            
+            CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+            
+            cs.setString(1, getCODIGO_PROD());
+            cs.setString(2, getSERIE_PROD());
+            cs.setString(3, getCAT_PROD());
+            cs.setString(4, getUM_PROD());
+            cs.setString(5, getDES_PROD());
+            cs.setDouble(6, getPRG_PROD());
+            cs.setDouble(7, getPRT_PROD());
+            cs.setString(8, getDIM_PROD());
+            cs.setInt(9, getSTOCK_PROD());
+            cs.setInt(10, getID_PROD());
+            
+            cs.execute();
+            
+            JOptionPane.showMessageDialog(null, "Se modificó correctamen el producto");
+                    
+        } catch (SQLException ex){
+            
+            JOptionPane.showMessageDialog(null, "No se pudo modificar el producto, error: "+ex.toString());
+            
         }
     }
     
