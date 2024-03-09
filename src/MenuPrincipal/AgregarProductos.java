@@ -4,9 +4,11 @@
  */
 package MenuPrincipal;
 import Practica01.Conexion;
+import java.awt.Container;
 import java.sql.*;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -16,24 +18,22 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AgregarProductos extends javax.swing.JFrame {
     
-    private ConsultasProductos consultasProductos;
+    private javax.swing.JTable tablaPRODUCTOS;
+    
+    public AgregarProductos(ConsultasProductos solicitarTabla){
+        this.tablaPRODUCTOS = solicitarTabla.tablaPRODUCTOS;
+    }
+    
     
     public void guardar(){
         Productos ObjetoProductos = new Productos();
         ObjetoProductos.InsertarProducto(jTextField_CB, jTextField_Serie, jComboBox_Categoria, jTextField_UM, jTextArea1, jTextField_PG, jTextField_PT, jTextField_DIM, jTextField_STOCK);
     }
     
-    /*public void actualizar(){
-        DefaultTableModel model = (DefaultTableModel)consultasProductos.tablaPRODUCTOS.getModel();
-        model.setRowCount(0);
-        consultasProductos.LeerPRODUCTOS();
+    public void actualizar(){
+        Productos objetoProductos = new Productos();
+        objetoProductos.MostrarProductos(tablaPRODUCTOS);
     }
-    /*
-
-    /**
-     * Creates new form AgregarProductos
-     */
-   
     
     public static Connection getConection(){
         String URL = "jdbc:mysql://localhost:3306/sebd";
@@ -467,6 +467,7 @@ public class AgregarProductos extends javax.swing.JFrame {
     private void jButton_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuardarActionPerformed
         guardar();
         LimpiarCampos();
+        actualizar();
     }//GEN-LAST:event_jButton_GuardarActionPerformed
 
     /**

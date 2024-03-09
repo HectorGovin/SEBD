@@ -1,20 +1,21 @@
 package MenuPrincipal;
 import java.sql.*;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class ConsultasProductos extends javax.swing.JFrame {
+    
     
     public JTable getTablaPRODUCTOS(){
         return tablaPRODUCTOS;
     }
     
-    private AgregarProductos agregarProductos;
     
-    public void actualizar(){
-        DefaultTableModel model = (DefaultTableModel)tablaPRODUCTOS.getModel();
-        model.setRowCount(0);
-    }
+    private AgregarProductos agregarProductos;
     
     public String[][] PRODUCTOS;
     String[][] data = new String[9][9];
@@ -23,16 +24,22 @@ public class ConsultasProductos extends javax.swing.JFrame {
     public static final String USERNAME = "root";
     public static final String PASSWORD = "";
     
-
     public ConsultasProductos() {
         initComponents();
         this.setLocationRelativeTo(null);
         mostrarProductos();
+        tablaPRODUCTOS = new javax.swing.JTable();
     }
     
     public void mostrarProductos(){
         Productos objetoProductos = new Productos();
         objetoProductos.MostrarProductos(tablaPRODUCTOS);
+    }
+    
+    public void actualizar(){
+        DefaultTableModel model = (DefaultTableModel)tablaPRODUCTOS.getModel();
+        model.setRowCount(0);
+        mostrarProductos();
     }
 
     public static Connection getConection(){
@@ -55,8 +62,46 @@ public class ConsultasProductos extends javax.swing.JFrame {
         ObjetoProductos.EliminarProducto(value);
     }
 
+    private void abrirModificarProductos(){
+        int row = tablaPRODUCTOS.getSelectedRow();
+        String value = tablaPRODUCTOS.getModel().getValueAt(row, 0).toString();
+        
+        ModificarProductos
+        modificarFrame = new
+        ModificarProductos();
+        
+        modificarFrame.recibirDatos(row, value);
+    }
     
+    private javax.swing.JTextField jTextField_ID;
+    private javax.swing.JTextField jTextField_CB;
+    private javax.swing.JTextField jTextField_Serie;
+    private javax.swing.JComboBox jComboBox_Categoria;
+    private javax.swing.JTextField jTextField_UM;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField_PG;
+    private javax.swing.JTextField jTextField_PT;
+    private javax.swing.JTextField jTextField_DIM;
+    private javax.swing.JTextField jTextField_STOCK;
     
+    public ConsultasProductos(ModificarProductos modificarFrame){
+        this.jTextField_ID = modificarFrame.jTextField_ID;
+        this.jTextField_CB = modificarFrame.jTextField_CB;
+        this.jTextField_Serie = modificarFrame.jTextField_Serie;
+        this.jComboBox_Categoria = modificarFrame.jComboBox_Categoria;
+        this.jTextField_UM = modificarFrame.jTextField_UM;
+        this.jTextArea1 = modificarFrame.jTextArea1;
+        this.jTextField_PG = modificarFrame.jTextField_PG;
+        this.jTextField_PT = modificarFrame.jTextField_PT;
+        this.jTextField_DIM = modificarFrame.jTextField_DIM;
+        this.jTextField_STOCK = modificarFrame.jTextField_STOCK;
+    }
+    
+    public void seleccionar(){
+        Productos ObjetoProductos = new Productos();
+        ObjetoProductos.SeleccionarProductos(tablaPRODUCTOS, jTextField_ID, jTextField_CB, jTextField_Serie, jComboBox_Categoria, jTextField_UM, jTextArea1, jTextField_PG, jTextField_PT, jTextField_DIM, jTextField_STOCK);
+    }
+   
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -122,9 +167,9 @@ public class ConsultasProductos extends javax.swing.JFrame {
         });
 
         jButton_Editar.setText("Editar");
-        jButton_Editar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_EditarMouseClicked(evt);
+        jButton_Editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_EditarActionPerformed(evt);
             }
         });
 
@@ -240,22 +285,23 @@ public class ConsultasProductos extends javax.swing.JFrame {
     this.dispose();
     }//GEN-LAST:event_jButton_SalirMouseClicked
 
-    private void jButton_ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ActualizarActionPerformed
-        actualizar();
-        mostrarProductos();
-    }//GEN-LAST:event_jButton_ActualizarActionPerformed
-
     private void tablaPRODUCTOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPRODUCTOSMouseClicked
-     
+    seleccionar();
     }//GEN-LAST:event_tablaPRODUCTOSMouseClicked
 
-    private void jButton_EditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_EditarMouseClicked
-    new ModificarProductos().setVisible(true);
-    }//GEN-LAST:event_jButton_EditarMouseClicked
-
     private void jButton_EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EliminarActionPerformed
-eliminar();
+    eliminar();
+    mostrarProductos();
     }//GEN-LAST:event_jButton_EliminarActionPerformed
+
+    private void jButton_ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ActualizarActionPerformed
+    actualizar();
+    }//GEN-LAST:event_jButton_ActualizarActionPerformed
+
+    private void jButton_EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EditarActionPerformed
+    new ModificarProductos().setVisible(true);
+    
+    }//GEN-LAST:event_jButton_EditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -293,7 +339,7 @@ eliminar();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JButton jButton_Actualizar;
+    private javax.swing.JButton jButton_Actualizar;
     private javax.swing.JButton jButton_Agregar;
     private javax.swing.JButton jButton_Aires;
     private javax.swing.JButton jButton_Editar;
