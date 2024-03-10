@@ -14,7 +14,6 @@ public class ConsultasProductos extends javax.swing.JFrame {
         return tablaPRODUCTOS;
     }
     
-    
     private AgregarProductos agregarProductos;
     
     public String[][] PRODUCTOS;
@@ -300,7 +299,6 @@ public class ConsultasProductos extends javax.swing.JFrame {
 
     private void jButton_EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EditarActionPerformed
     new ModificarProductos().setVisible(true);
-    
     }//GEN-LAST:event_jButton_EditarActionPerformed
 
     /**

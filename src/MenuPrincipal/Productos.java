@@ -156,6 +156,38 @@ public class Productos {
             
         }
     }
+    
+        public void InsertarServicio(JComboBox paramCat, JTextArea paramDes, JTextField paramPRG){
+       
+        setCAT_PROD(""+paramCat.getSelectedItem());
+        setDES_PROD(paramDes.getText());
+        double PRGDouble = Double.parseDouble(paramPRG.getText());
+        setPRG_PROD(PRGDouble);
+
+        
+        Conexion objetoConexion = new Conexion();
+        
+        String consulta = "insert into productos (CAT_PROD, DES_PROD, PRG_PROD) values (?, ?, ?)";
+        
+        try{
+            
+            CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+            
+            cs.setString(1, getCAT_PROD());
+            cs.setString(2, getDES_PROD());
+            cs.setDouble(3, getPRG_PROD());
+            
+            cs.execute();
+            
+            JOptionPane.showMessageDialog(null, "Se agregó correctamen el servicio");
+                    
+        } catch (Exception ex){
+            
+            JOptionPane.showMessageDialog(null, "No se pudo agregar el servicio, error: "+ex.toString());
+            
+        }
+    }
+    
     public void MostrarProductos(JTable paramTablaTotalProductos){
         
         Conexion objetoConexion = new Conexion();
