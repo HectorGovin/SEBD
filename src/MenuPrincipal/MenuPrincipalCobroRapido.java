@@ -108,11 +108,11 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
             jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_BarraLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addGroup(jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel_RegistroProd)
+                .addGroup(jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel_Folio_S, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel_Folio)))
+                        .addComponent(jLabel_Folio))
+                    .addComponent(jLabel_RegistroProd))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 

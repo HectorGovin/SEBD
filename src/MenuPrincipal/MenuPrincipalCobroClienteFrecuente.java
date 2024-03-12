@@ -9,6 +9,7 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
         return tablaPRODUCTOS;
     }
     
+    
     private AgregarProductos agregarProductos;
     
     public void actualizar(){
@@ -18,16 +19,18 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
     
     public String[][] PRODUCTOS;
     String[][] data = new String[9][9];
+    String[] NOMBRES = new String[9];
     
     public static final String URL = "jdbc:mysql://localhost:3306/sebd";
     public static final String USERNAME = "root";
     public static final String PASSWORD = "";
     
+    Clientes cl = new Clientes();
 
     public MenuPrincipalCobroClienteFrecuente() {
         initComponents();
         this.setLocationRelativeTo(null);
-        mostrarProductos();
+        cl.CargarNombres(jComboBox_Cliente);
     }
     
     public void mostrarProductos(){
@@ -36,7 +39,6 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
     }
 
     public static Connection getConection(){
-        
         Connection con = null;
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -46,15 +48,15 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
         }
         return con;
     }
-    
-        public void eliminar(){
-        int row = tablaPRODUCTOS.getSelectedRow();
-        String value = tablaPRODUCTOS.getModel().getValueAt(row, 0).toString();
-        
-        Productos ObjetoProductos = new Productos();
-        ObjetoProductos.EliminarProducto(value);
-    }
 
+    public void RecibirDatos(String RFC){
+        System.out.println("\n"+RFC);
+        String Taco = RFC;
+        this.jTextField_RFC.setEditable(true);
+        jTextField_RFC.setText(Taco);
+        jTextField_CP.setText(Taco);
+        jTextField_Email.setText(RFC);
+    }
     
     
     
@@ -128,11 +130,11 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
             jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_BarraLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addGroup(jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel_RegistroProd)
+                .addGroup(jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel_Folio_S, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel_Folio)))
+                        .addComponent(jLabel_Folio))
+                    .addComponent(jLabel_RegistroProd))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -185,9 +187,17 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
         );
 
         jButton_CargarDatosCliente.setText("Cargar datos");
+        jButton_CargarDatosCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_CargarDatosClienteMouseClicked(evt);
+            }
+        });
 
         jPanel_ID1.setBackground(new java.awt.Color(243, 255, 242));
         jPanel_ID1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(171, 171, 171), 1, true), "RFC del cliente"));
+
+        jTextField_RFC.setEditable(false);
+        jTextField_RFC.setEnabled(false);
 
         javax.swing.GroupLayout jPanel_ID1Layout = new javax.swing.GroupLayout(jPanel_ID1);
         jPanel_ID1.setLayout(jPanel_ID1Layout);
@@ -459,6 +469,10 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton_ConfirmarMouseClicked
 
+    private void jButton_CargarDatosClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_CargarDatosClienteMouseClicked
+        cl.BuscarDatos(""+jComboBox_Cliente.getSelectedItem());
+    }//GEN-LAST:event_jButton_CargarDatosClienteMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -511,20 +525,14 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
     public javax.swing.JPanel jPanel_ID3;
     public javax.swing.JPanel jPanel_ID4;
     public javax.swing.JPanel jPanel_ID5;
-    private javax.swing.JPanel jPanel_ID6;
-    private javax.swing.JPanel jPanel_ID7;
     public javax.swing.JPanel jPanel_ID8;
     public javax.swing.JPanel jPanel_ID9;
     private javax.swing.JPanel jPanel_Opciones;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextArea jTextArea_Direccion;
     private javax.swing.JTextArea jTextArea_DireccionFiscal;
     private javax.swing.JTextArea jTextArea_RegimenFiscal;

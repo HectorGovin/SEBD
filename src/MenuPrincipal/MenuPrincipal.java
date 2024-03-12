@@ -246,6 +246,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jButton_VentasHoy.setText("VENTAS DE HOY");
 
         jButton_CobroClienteU.setText("COBRO CLIENTE USUAL");
+        jButton_CobroClienteU.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_CobroClienteUMouseClicked(evt);
+            }
+        });
 
         jButton_CobroRapido.setText("COBRO RÁPIDO");
         jButton_CobroRapido.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -504,8 +509,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_ServiciosMouseClicked
 
     private void jButton_CobroRapidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_CobroRapidoMouseClicked
-        
+        new MenuPrincipalCobroRapido().setVisible(true);
     }//GEN-LAST:event_jButton_CobroRapidoMouseClicked
+
+    private void jButton_CobroClienteUMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_CobroClienteUMouseClicked
+        new MenuPrincipalCobroClienteFrecuente().setVisible(true);
+    }//GEN-LAST:event_jButton_CobroClienteUMouseClicked
 
     /**
      * @param args the command line arguments
