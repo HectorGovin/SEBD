@@ -9,7 +9,8 @@ import java.text.*;
 
 public class MenuPrincipal extends javax.swing.JFrame {
     
-    String[][] PRODUCTOS = new String[50][9];
+    public static String[][] PRODUCTOS = new String[50][10];
+    public static String[][] PRODUCTOStab = new String[50][10];
     int contadorProd;
     int i = 0;
     
@@ -33,6 +34,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
         return con;
     }
     
+    public void Limpiar(){
+        System.out.println("\n\nFinal si pasó xdddddddd");
+        String[][] A = new String[50][10];
+        
+        tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
+        A,
+        new String [] {
+            "COD DE BARRAS", "SERIE", "DESCRIPCION", "CATEGORIA", "U.M", "$ GENERAL", "$ TECNICO", "CANTIDAD"
+        }
+        ));
+        
+        System.out.println("\n" + PRODUCTOS[0][0]);
+    }
+    
     private void EstablecerFecha(){
         SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
         Calendar c = Calendar.getInstance();
@@ -40,7 +55,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel_FechaHora.setText(date);
     }
     
-    private void CargarTabla(){
+    public String[][] EnviarPRODUCTOS(){
+        return PRODUCTOStab;
+    }
+    
+    public String[][] EnviarPRODUCTOSaPartidas(){
+        return PRODUCTOS;
+    }
+    
+    public void CargarTabla(){
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
         PRODUCTOS,
         new String [] {
@@ -95,12 +118,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
             con = getConection();
             PreparedStatement ps;
             ResultSet res;
-            ps = con.prepareStatement("SELECT * FROM PRODUCTOS");
+            ps = con.prepareStatement("SELECT MAX(ID_REP) AS ID_REP FROM REPORTES");
             res = ps.executeQuery(); int ow = 0;
             if(res.next()){
-                ow = res.getInt("ID_PROD");
+                ow = res.getInt("ID_REP");
             }
-            String s = String.format("%04d", ow);
+            int xds = ow+1;
+            String s = String.format("%04d", xds);
+                System.out.println("\n El folio es: " + xds);
             jLabel_Folio.setText(s);
             
         } catch(Exception ex){
@@ -118,15 +143,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
             ps = con.prepareStatement("SELECT * FROM PRODUCTOS WHERE CODIGO_PROD = '" + cod + "'");
             res = ps.executeQuery();
             while(res.next()){
-                PRODUCTOS[m][0] = ("" + res.getString("CODIGO_PROD"));
+                PRODUCTOS[m][0] = ("" + res.getString("CODIGO_PROD")); 
                 PRODUCTOS[m][1] = ("" + res.getString("SERIE_PROD"));
-                PRODUCTOS[m][2] = ("" + res.getString("DES_PROD"));
-                PRODUCTOS[m][3] = ("" + res.getString("CAT_PROD"));
+                PRODUCTOS[m][2] = ("" + res.getString("DES_PROD")); 
+                PRODUCTOStab[m][0]=PRODUCTOS[m][2];
+                PRODUCTOS[m][3] = ("" + res.getString("CAT_PROD")); 
                 PRODUCTOS[m][4] = ("" + res.getString("UM_PROD"));
-                PRODUCTOS[m][5] = ("" + res.getString("PRG_PROD"));
+                PRODUCTOS[m][5] = ("" + res.getString("PRG_PROD")); 
                 PRODUCTOS[m][6] = ("" + res.getString("PRT_PROD"));
+                PRODUCTOS[m][9] = ("" + res.getInt("ID_PROD"));
             }
-            PRODUCTOS[m][8] = ""+(Float.parseFloat(PRODUCTOS[m][5]) * Float.parseFloat(PRODUCTOS[m][7]));
+            PRODUCTOStab[m][1]=PRODUCTOS[m][7]; //CANTIDAD
+            PRODUCTOS[m][8] = ""+(Float.parseFloat(PRODUCTOS[m][5]) * Float.parseFloat(PRODUCTOS[m][7])); 
+            PRODUCTOStab[m][2]=PRODUCTOS[m][8];
             CargarTabla();
         }catch(SQLException e){
             System.out.println(e);
@@ -563,7 +592,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton_VentasHoy;
     private javax.swing.JLabel jLabel_FH_S;
     private javax.swing.JLabel jLabel_FechaHora;
-    private javax.swing.JLabel jLabel_Folio;
+    public javax.swing.JLabel jLabel_Folio;
     private javax.swing.JLabel jLabel_Folio_S;
     private javax.swing.JLabel jLabel_G_S;
     private javax.swing.JLabel jLabel_Ganancias;

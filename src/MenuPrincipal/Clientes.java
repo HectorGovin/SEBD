@@ -99,18 +99,18 @@ public class Clientes {
             ps = con.prepareStatement("SELECT * FROM CLIENTES WHERE NOM_CLIE='" + N + "'");
             res = ps.executeQuery();
             if(res.next()){
-                setID_CLIE( res.getInt("ID_CLIE")); System.out.println("\n ID es: "+getID_CLIE());
-                setRFC_CLIE(""+res.getString("RFC_CLIE")); System.out.println("\n RFC es: "+getRFC_CLIE());
+                setID_CLIE( res.getInt("ID_CLIE"));
+                setRFC_CLIE(""+res.getString("RFC_CLIE"));
                 setCP_CLIE(res.getInt("CP_CLIE"));
                 setMAIL_CLIE(res.getString("MAIL_CLIE"));
                 setTELF_CLIE("" + res.getString("TELF_CLIE"));
+                setDIR_CLIE(""+res.getString("DIR_CLIE"));
                 setREGI_CLIE("" + res.getString("REGI_CLIE"));
                 setDIRFIS_CLIE("" + res.getString("DIRFIS_CLIE"));
             }
-            MenuPrincipalCobroClienteFrecuente MPCCF = new MenuPrincipalCobroClienteFrecuente();
-            MPCCF.RecibirDatos(getRFC_CLIE());
         }catch(SQLException e){
             System.out.println(e);
         }
     }
+    
 }

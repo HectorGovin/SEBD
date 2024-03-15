@@ -145,9 +145,7 @@ public class Productos {
             cs.setDouble(7, getPRT_PROD());
             cs.setString(8, getDIM_PROD());
             cs.setInt(9, getSTOCK_PROD());
-            
             cs.execute();
-            
             JOptionPane.showMessageDialog(null, "Se agregó correctamen el producto");
                     
         } catch (Exception ex){

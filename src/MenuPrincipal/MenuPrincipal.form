@@ -487,6 +487,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="0001"/>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton_A&#xf1;adirProducto">
                   <Properties>
