@@ -12,7 +12,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static String[][] PRODUCTOS = new String[50][10];
     public static String[][] PRODUCTOStab = new String[50][10];
     int contadorProd;
-    int i = 0;
     
     public static final String URL = "jdbc:mysql://localhost:3306/sebd", USERNAME = "root", PASSWORD = "";
     
@@ -35,17 +34,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
     
     public void Limpiar(){
-        System.out.println("\n\nFinal si pasó xdddddddd");
-        String[][] A = new String[50][10];
-        
-        tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
-        A,
-        new String [] {
-            "COD DE BARRAS", "SERIE", "DESCRIPCION", "CATEGORIA", "U.M", "$ GENERAL", "$ TECNICO", "CANTIDAD"
-        }
-        ));
-        
-        System.out.println("\n" + PRODUCTOS[0][0]);
     }
     
     private void EstablecerFecha(){
@@ -91,28 +79,28 @@ public class MenuPrincipal extends javax.swing.JFrame {
         ConsultaFolio();
     }
     
-    private void PR(){
+    private void ValidarCantidades(){
         String cod = jTextField_Producto.getText();
         if(PRODUCTOS[0][0] != null){
                 for(int x = 0; PRODUCTOS [x][0] != null; x++){
                     if(PRODUCTOS[x][0].equals(cod)){
                         PRODUCTOS[x][7] = "" + (Integer.parseInt(PRODUCTOS[x][7]) + 1);
-                        PR_DB(x); break;
+                        ConsultaProductos(x); break;
                     }else if(PRODUCTOS[x + 1][0] == null){
                         contadorProd++;
                         PRODUCTOS[contadorProd][7] = ("" + 1);
-                        PR_DB(contadorProd); break;
+                        ConsultaProductos(contadorProd); break;
                     }
                 }
             }else{
-                contadorProd=0;
+                //PRIMER PRODUCTO
+                contadorProd=0; 
                 PRODUCTOS[contadorProd][7] = ("" + 1);
-                PR_DB(i);
+                ConsultaProductos(contadorProd);
             }
     }
     
     public void ConsultaFolio(){
-        String id = "";
         try{
             Connection con = null;
             con = getConection();
@@ -125,15 +113,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
             int xds = ow+1;
             String s = String.format("%04d", xds);
-                System.out.println("\n El folio es: " + xds);
             jLabel_Folio.setText(s);
             
-        } catch(Exception ex){
-            JOptionPane.showMessageDialog(null, "No se pudo mostrar la tabla, error: "+ex.toString());
-        }
+        } catch(Exception ex){JOptionPane.showMessageDialog(null, "Error en la consulta del folio: "+ex.toString());}
     }
     
-    private void PR_DB(int m){
+    private void ConsultaProductos(int m){
         String cod = jTextField_Producto.getText();
         try{
             Connection con = null;
@@ -521,7 +506,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jTextField_ProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ProductoKeyReleased
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            PR();
+            ValidarCantidades();
             jTextField_Producto.setText("");}
     }//GEN-LAST:event_jTextField_ProductoKeyReleased
 
