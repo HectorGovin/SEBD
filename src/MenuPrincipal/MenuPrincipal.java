@@ -478,11 +478,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenu_ProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_ProductosMouseClicked
-        new ConsultaAA().setVisible(true);
+    new ConsultaAA().setVisible(true);
     }//GEN-LAST:event_jMenu_ProductosMouseClicked
 
     private void jMenu_UsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_UsuariosMouseClicked
-        new ConsultasUsuarios().setVisible(true);
+    new ConsultaUsuarios().setVisible(true);
     }//GEN-LAST:event_jMenu_UsuariosMouseClicked
 
     private void jTextField_ProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ProductoKeyReleased

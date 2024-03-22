@@ -16,23 +16,11 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Wilbert
  */
-public class AgregarServicios extends javax.swing.JFrame {
-    
-    private javax.swing.JTable tablaPRODUCTOS;
-    
-    public AgregarServicios(ConsultasProductos solicitarTabla){
-        this.tablaPRODUCTOS = solicitarTabla.tablaPRODUCTOS;
-    }
-    
+public class AgregarServicios extends javax.swing.JFrame { 
     
     public void guardar(){
         Productos ObjetoProductos = new Productos();
         ObjetoProductos.InsertarServicio(jComboBox_Categoria, jTextArea1, jTextField_PG);
-    }
-    
-    public void actualizar(){
-        Productos objetoProductos = new Productos();
-        objetoProductos.MostrarProductos(tablaPRODUCTOS);
     }
     
     public static Connection getConection(){
@@ -216,7 +204,7 @@ public class AgregarServicios extends javax.swing.JFrame {
             jPanel_UM1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_UM1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel_UM1Layout.setVerticalGroup(
@@ -257,11 +245,11 @@ public class AgregarServicios extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addComponent(jPanel_UM1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel_FondoLayout.createSequentialGroup()
-                        .addGap(142, 142, 142)
+                        .addGap(144, 144, 144)
                         .addComponent(jButton_Guardar)
                         .addGap(31, 31, 31)
                         .addComponent(jButton_Cancelar)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel_FondoLayout.setVerticalGroup(
             jPanel_FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,11 +264,11 @@ public class AgregarServicios extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jPanel_Categoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel_UM1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(27, 27, 27)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel_FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -354,7 +342,7 @@ public class AgregarServicios extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel_PG;
     private javax.swing.JPanel jPanel_UM1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    public javax.swing.JTextArea jTextArea1;
     public javax.swing.JTextField jTextField_ID;
     public javax.swing.JTextField jTextField_PG;
     // End of variables declaration//GEN-END:variables

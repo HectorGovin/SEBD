@@ -252,10 +252,10 @@ public class Productos {
                 paramCB.setText((String) (paramTablaProductos.getValueAt(fila, 1).toString()));
                 paramSerie.setText((String) (paramTablaProductos.getValueAt(fila, 2).toString()));
                 paramCat.setSelectedItem((String) (paramTablaProductos.getValueAt(fila, 3).toString()));
-                paramUM.setText((String) (paramTablaProductos.getValueAt(fila, 4).toString()));
-                paramDes.setText((String) (paramTablaProductos.getValueAt(fila, 5).toString()));
-                paramPRG.setText((String) (paramTablaProductos.getValueAt(fila, 6).toString()));
-                paramPRT.setText((String) (paramTablaProductos.getValueAt(fila,7).toString()));
+                paramDes.setText((String) (paramTablaProductos.getValueAt(fila, 4).toString()));
+                paramPRG.setText((String) (paramTablaProductos.getValueAt(fila, 5).toString()));
+                paramPRT.setText((String) (paramTablaProductos.getValueAt(fila,6).toString()));
+                paramUM.setText((String) (paramTablaProductos.getValueAt(fila, 7).toString()));
                 paramDIM.setText((String) (paramTablaProductos.getValueAt(fila, 8).toString()));
                 paramStock.setText((String) (paramTablaProductos.getValueAt(fila, 9).toString()));                
             }
@@ -267,10 +267,30 @@ public class Productos {
         }
     }
     
-    
-    public void ModificarProducto(String paramID, JTextField paramCB, JTextField paramSerie, JComboBox paramCat, JTextField paramUM, JTextArea paramDes, JTextField paramPRG, JTextField paramPRT, JTextField paramDIM, JTextField paramStock){
+        public void SeleccionarServicios(JTable paramTablaProductos, JTextField paramID, JTextArea paramDes, JComboBox paramCat, JTextField paramPRG){
         
-        setID_PROD(Integer.parseInt(paramID));
+        try{
+            int fila = paramTablaProductos.getSelectedRow();
+            if(fila >=0){
+                paramID.setText((paramTablaProductos.getValueAt(fila, 0).toString()));
+                paramDes.setText((String) (paramTablaProductos.getValueAt(fila, 1).toString())); 
+                paramCat.setSelectedItem((String) (paramTablaProductos.getValueAt(fila, 2).toString()));
+                paramPRG.setText((String) (paramTablaProductos.getValueAt(fila, 3).toString()));
+                
+                               
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Fila no encontrada");
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, "Error de seleccion, error: "+ex.toString());
+        }
+    }
+    
+    
+    public void ModificarProducto(JTextField paramID, JTextField paramCB, JTextField paramSerie, JComboBox paramCat, JTextField paramUM, JTextArea paramDes, JTextField paramPRG, JTextField paramPRT, JTextField paramDIM, JTextField paramStock){
+        
+        setID_PROD(Integer.parseInt(paramID.getText()));
         setCODIGO_PROD(paramCB.getText());
         setSERIE_PROD(paramSerie.getText());
         setCAT_PROD(""+paramCat.getSelectedItem());
@@ -291,7 +311,7 @@ public class Productos {
         try{
             
             CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
-            
+                        
             cs.setString(1, getCODIGO_PROD());
             cs.setString(2, getSERIE_PROD());
             cs.setString(3, getCAT_PROD());
@@ -310,6 +330,38 @@ public class Productos {
         } catch (SQLException ex){
             
             JOptionPane.showMessageDialog(null, "No se pudo modificar el producto, error: "+ex.toString());
+            
+        }
+    }
+    
+    public void ModificarServicio(JTextField paramID, JComboBox paramCat, JTextArea paramDes, JTextField paramPRG){
+        
+        setID_PROD(Integer.parseInt(paramID.getText()));
+        setCAT_PROD(""+paramCat.getSelectedItem());
+        setDES_PROD(paramDes.getText());
+        double PRGDouble = Double.parseDouble(paramPRG.getText());
+        setPRG_PROD(PRGDouble);
+        
+        Conexion objetoConexion = new Conexion();
+        
+        String consulta = "UPDATE productos SET CAT_PROD=?, DES_PROD=?, PRG_PROD=? WHERE ID_PROD=?;";
+        
+        try{
+            
+            CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
+            
+            cs.setString(1, getCAT_PROD());
+            cs.setString(2, getDES_PROD());
+            cs.setDouble(3, getPRG_PROD());
+            cs.setInt(4, getID_PROD());
+            
+            cs.execute();
+            
+            JOptionPane.showMessageDialog(null, "Se modificó correctamen el servicio");
+                    
+        } catch (SQLException ex){
+            
+            JOptionPane.showMessageDialog(null, "No se pudo modificar el servicio, error: "+ex.toString());
             
         }
     }
