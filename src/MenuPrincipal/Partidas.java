@@ -14,7 +14,7 @@ public class Partidas {
     Reportes r = new Reportes();
     
     int ID_PAR, ID_REP, ID_PROD, CAN_PAR;
-    double SUBT_PAR, IVA_PAR, TOT_PAR;
+    double SUBT_PAR, IVA_PAR, TOT_PAR, PRG_PROD;
     
     String[][] CLIENTES = new String[30][9];
     String[] NOMBRES = new String[9];
@@ -23,9 +23,9 @@ public class Partidas {
 
     public void setID_PAR(int ID_PAR) {this.ID_PAR = ID_PAR;}
     
-    /*public int getID_REP() {return ID_REP;}
+    public int getNOTA_REP() {return ID_PAR;}
 
-    public void setID_REP(int ID_REP) {this.ID_REP = ID_REP;}*/
+    public void setNOTA_REP(int ID_PAR) {this.ID_PAR = ID_PAR;}
     
     public int getID_PROD() {return ID_PROD;}
 
@@ -47,6 +47,14 @@ public class Partidas {
 
     public void setTOT_PAR(double TOT_PAR) { this.TOT_PAR = TOT_PAR;}
     
+    public double getPRG_PROD() {
+        return PRG_PROD;
+    }
+
+    public void setPRG_PROD(double PRG_PROD) {
+        this.PRG_PROD = PRG_PROD;
+    }
+    
     public static Connection getConection(){
         Connection con = null;
         try{
@@ -58,23 +66,26 @@ public class Partidas {
         return con;
     }
     
-    public void S(){
-        mp.EnviarPRODUCTOSaPartidas();
-            System.out.println("\n\n");
-        for(int i = 0; mp.PRODUCTOS[i][9] != null; i++){
-            System.out.println("\nSí pasó por aqui");
-            SetDatos(mp.PRODUCTOS[i][9], mp.PRODUCTOS[i][7], Double.parseDouble("5"), Double.parseDouble("5"), Double.parseDouble(mp.PRODUCTOS[i][8]));
-            SubirDatosPartidas();
-        mp.Limpiar();
-        }
+    public void Setiar(){
     }
     
-    public void SetDatos(String IDProd, String Cant, double SubT, double IVA, double Tot){
+    /*public void SetDatos(String Nota, String IDProd, String Cant, double SubT, double IVA, double Tot){
+        setNOTA_REP(Integer.parseInt(Nota));
         setID_PROD(Integer.parseInt(IDProd));
         setCAN_PAR(Integer.parseInt(Cant));
         setSUBT_PAR(SubT);
         setIVA_PAR(IVA);
         setTOT_PAR(Tot);
+    }*/
+    
+    public void SetDatos(String Nota, String IDProd, String Precio, String Cant){
+        setNOTA_REP(Integer.parseInt(Nota));
+        setID_PROD(Integer.parseInt(IDProd));
+        setPRG_PROD(Double.parseDouble(Precio)/1.16);
+        setCAN_PAR(Integer.parseInt(Cant));
+        setSUBT_PAR((Double.parseDouble(Precio)*Double.parseDouble(Cant))/1.16);
+        setIVA_PAR(getSUBT_PAR()*0.16);
+        setTOT_PAR(getSUBT_PAR()*1.16);
     }
     
     public void SubirDatosPartidas(){
@@ -84,12 +95,13 @@ public class Partidas {
             PreparedStatement ps;
             ResultSet res;
             ps = con.prepareStatement("INSERT INTO PARTIDAS (`ID_REP`, `ID_PROD`, `CAN_PAR`, `SUBT_PAR`, `IVA_PAR`, `TOT_PAR`) VALUES ( ?, ?, ?, ?, ?, ?)");
-            ps.setInt(1, r.getID_REP());
+            ps.setInt(1, getNOTA_REP());
             ps.setInt(2, getID_PROD());
             ps.setInt(3, getCAN_PAR());
             ps.setDouble(4, getSUBT_PAR());
             ps.setDouble(5, getIVA_PAR());
             ps.setDouble(6, getTOT_PAR());
+            ps.executeUpdate();
         } catch(Exception ex){
             JOptionPane.showMessageDialog(null, "No se pudo mostrar la tabla, error: "+ex.toString());
         }

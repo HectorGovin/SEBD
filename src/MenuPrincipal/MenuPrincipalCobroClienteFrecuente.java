@@ -56,6 +56,7 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
             c = tablaPRODUCTOS.getColumnModel().getColumn(cx);
             c.setMaxWidth(80); c.setMinWidth(80); c.setResizable(false); 
         }*/
+        jLabel_Folio.setText(mp.jLabel_Folio.getText());
     }
 
     public static Connection getConection(){
@@ -518,8 +519,15 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
 
     private void jButton_ConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ConfirmarMouseClicked
         r.SetDatos(1, cl.getID_CLIE(), mp.jLabel_Folio.getText(), ""+jComboBox_FP.getSelectedItem());
-        r.SubirDatosReportes();
-        p.S();
+        mp.EnviarPRODUCTOSaPartidas();
+        System.out.println("\n\n");
+        System.out.println("\nSí pasó por aqui");
+        for(int i = 0; mp.PRODUCTOS[i][9] != null; i++){
+            p.SetDatos(""+mp.jLabel_Folio.getText(), mp.PRODUCTOS[i][9], mp.PRODUCTOS[i][5], mp.PRODUCTOS[i][7]);
+            //p.SetDatos(""+mp.jLabel_Folio.getText(), mp.PRODUCTOS[i][9], mp.PRODUCTOS[i][7], Double.parseDouble("5"), Double.parseDouble("5"), Double.parseDouble(mp.PRODUCTOS[i][8]));
+            //System.out.println("\nRegistro no. "+i+":\n\nID de REPORTE: "+r.getNOTA_REP()+"   ID de PRODUCTO: "+mp.PRODUCTOS[i][9]+"   Cantidad: "+mp.PRODUCTOS[i][7]+"   SubTotal: "+Double.parseDouble("5")+"   IVA: "+Double.parseDouble("5")+"   Total: "+Double.parseDouble(mp.PRODUCTOS[i][8]));
+            System.out.println("\nRegistro no. "+i+":\n\nID de REPORTE: "+r.getNOTA_REP()+"   ID de PRODUCTO: "+mp.PRODUCTOS[i][9]+"   Cantidad: "+p.getCAN_PAR()+"   SubTotal: "+p.getSUBT_PAR()+"   IVA: "+p.getIVA_PAR()+"   Total: "+p.getTOT_PAR());
+            p.SubirDatosPartidas();}
         JOptionPane.showMessageDialog(null, "Registro añadido con éxito");
         dispose();
     }//GEN-LAST:event_jButton_ConfirmarMouseClicked

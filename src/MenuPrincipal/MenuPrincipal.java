@@ -12,7 +12,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static String[][] PRODUCTOS = new String[50][10];
     public static String[][] PRODUCTOStab = new String[50][10];
     int contadorProd;
-    
     public static final String URL = "jdbc:mysql://localhost:3306/sebd", USERNAME = "root", PASSWORD = "";
     
     public MenuPrincipal() {
@@ -176,6 +175,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jTextField_Total = new javax.swing.JTextField();
         jButton_Modificar = new javax.swing.JButton();
         jButton_ELIMINAR = new javax.swing.JButton();
+        jButton_Actualizar = new javax.swing.JButton();
         jLabel_Folio_S = new javax.swing.JLabel();
         jLabel_Folio = new javax.swing.JLabel();
         jButton_AñadirProducto = new javax.swing.JButton();
@@ -298,6 +298,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jButton_ELIMINAR.setForeground(new java.awt.Color(255, 255, 255));
         jButton_ELIMINAR.setText("ELIMINAR");
 
+        jButton_Actualizar.setText("Actualizar");
+        jButton_Actualizar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_ActualizarMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel_FAS_AND_BOTTOMLayout = new javax.swing.GroupLayout(jPanel_FAS_AND_BOTTOM);
         jPanel_FAS_AND_BOTTOM.setLayout(jPanel_FAS_AND_BOTTOMLayout);
         jPanel_FAS_AND_BOTTOMLayout.setHorizontalGroup(
@@ -316,6 +323,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                         .addComponent(jButton_Modificar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_ELIMINAR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_Actualizar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
                         .addComponent(jButton_VentasHoy, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -346,7 +355,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addComponent(jButton_AireAcondicionado)
                     .addComponent(jButton_Servicios)
                     .addComponent(jButton_Modificar)
-                    .addComponent(jButton_ELIMINAR))
+                    .addComponent(jButton_ELIMINAR)
+                    .addComponent(jButton_Actualizar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -530,6 +540,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         new MenuPrincipalCobroClienteFrecuente().setVisible(true);
     }//GEN-LAST:event_jButton_CobroClienteUMouseClicked
 
+    private void jButton_ActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ActualizarMouseClicked
+        PRODUCTOS = new String[50][10];
+        PRODUCTOStab = new String[50][10];
+        CargarTabla();
+    }//GEN-LAST:event_jButton_ActualizarMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -566,6 +582,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_Actualizar;
     private javax.swing.JButton jButton_AireAcondicionado;
     private javax.swing.JButton jButton_AñadirProducto;
     private javax.swing.JButton jButton_CobroClienteU;

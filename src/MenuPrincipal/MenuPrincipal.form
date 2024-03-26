@@ -267,6 +267,8 @@
                                       <Component id="jButton_Modificar" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jButton_ELIMINAR" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jButton_Actualizar" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -306,6 +308,7 @@
                                   <Component id="jButton_Servicios" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton_Modificar" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton_ELIMINAR" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButton_Actualizar" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jScrollPane1" pref="389" max="32767" attributes="0"/>
@@ -469,6 +472,14 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="ELIMINAR"/>
                       </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="jButton_Actualizar">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Actualizar"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_ActualizarMouseClicked"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

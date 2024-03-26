@@ -2,6 +2,7 @@ package MenuPrincipal;
 import java.sql.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 
 public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
     
@@ -11,13 +12,15 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
     
     private AgregarProductos agregarProductos;
     
-    public void actualizar(){
+    Clientes cl = new Clientes();
+    MenuPrincipal mp = new MenuPrincipal();
+    Reportes r = new Reportes();
+    Partidas p = new Partidas();
+    
+    /*public void actualizar(){
         DefaultTableModel model = (DefaultTableModel)tablaPRODUCTOS.getModel();
         model.setRowCount(0);
-    }
-    
-    public String[][] PRODUCTOS;
-    String[][] data = new String[9][9];
+    }*/
     
     public static final String URL = "jdbc:mysql://localhost:3306/sebd";
     public static final String USERNAME = "root";
@@ -27,15 +30,10 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
     public MenuPrincipalCobroRapido() {
         initComponents();
         this.setLocationRelativeTo(null);
-        mostrarProductos();
+        CargarTabla();
     }
     
-    public void mostrarProductos(){
-        Productos objetoProductos = new Productos();
-        objetoProductos.MostrarProductos(tablaPRODUCTOS);
-    }
-
-    public static Connection getConection(){
+    /*public static Connection getConection(){
         
         Connection con = null;
         try{
@@ -45,18 +43,31 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
             System.out.println(e);
         }
         return con;
+    }*/
+    
+    private void CargarTabla(){
+        mp.EnviarPRODUCTOS();
+        tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
+        mp.PRODUCTOStab,
+        new String [] {
+            "DESCRIPCION", "CANTIDAD", "COBRO"
+        }
+        ));
+        /*TableColumn c;
+        c = tablaPRODUCTOS.getColumnModel().getColumn(0);
+        c.setMaxWidth(120); c.setMinWidth(120); c.setResizable(false); 
+        c = tablaPRODUCTOS.getColumnModel().getColumn(1);
+        c.setMaxWidth(70); c.setMinWidth(70); c.setResizable(false); 
+        c = tablaPRODUCTOS.getColumnModel().getColumn(2);
+        c.setPreferredWidth(400);
+        c = tablaPRODUCTOS.getColumnModel().getColumn(3);
+        c.setMaxWidth(80); c.setMinWidth(80); c.setResizable(false); 
+        for(int cx = 4; cx<8;cx++){
+            c = tablaPRODUCTOS.getColumnModel().getColumn(cx);
+            c.setMaxWidth(80); c.setMinWidth(80); c.setResizable(false); 
+        }*/
+        jLabel_Folio.setText(mp.jLabel_Folio.getText());
     }
-    
-        public void eliminar(){
-        int row = tablaPRODUCTOS.getSelectedRow();
-        String value = tablaPRODUCTOS.getModel().getValueAt(row, 0).toString();
-        
-        Productos ObjetoProductos = new Productos();
-        ObjetoProductos.EliminarProducto(value);
-    }
-
-    
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -73,6 +84,7 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
         tablaPRODUCTOS = new javax.swing.JTable();
         jButton_Cancelar = new javax.swing.JButton();
         jButton_Confirmar = new javax.swing.JButton();
+        jComboBox_FP = new javax.swing.JComboBox<>();
 
         setLocation(new java.awt.Point(0, 0));
 
@@ -152,6 +164,9 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
             }
         });
 
+        jComboBox_FP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "EFECTIVO", "TARJETA", "TRANSFERENCIA" }));
+        jComboBox_FP.setSelectedIndex(-1);
+
         javax.swing.GroupLayout jPanel_OpcionesLayout = new javax.swing.GroupLayout(jPanel_Opciones);
         jPanel_Opciones.setLayout(jPanel_OpcionesLayout);
         jPanel_OpcionesLayout.setHorizontalGroup(
@@ -160,11 +175,13 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
-                .addGap(75, 75, 75)
+                .addContainerGap()
+                .addComponent(jComboBox_FP, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton_Confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(92, 92, 92)
+                .addGap(55, 55, 55)
                 .addComponent(jButton_Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
         );
         jPanel_OpcionesLayout.setVerticalGroup(
             jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,8 +190,9 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(jButton_Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_FP, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
 
         javax.swing.GroupLayout jPanel_FondoLayout = new javax.swing.GroupLayout(jPanel_Fondo);
@@ -192,7 +210,7 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
             .addGroup(jPanel_FondoLayout.createSequentialGroup()
                 .addComponent(jPanel_Barra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel_Opciones, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                .addComponent(jPanel_Opciones, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -219,7 +237,17 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaPRODUCTOSMouseClicked
 
     private void jButton_ConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ConfirmarMouseClicked
-        // TODO add your handling code here:
+        r.SetDatos(1, 1, mp.jLabel_Folio.getText(), ""+jComboBox_FP.getSelectedItem());
+        mp.EnviarPRODUCTOSaPartidas();
+        System.out.println("\n\n");
+        System.out.println("\nSí pasó por aqui");
+        for(int i = 0; mp.PRODUCTOS[i][9] != null; i++){
+            p.SetDatos(""+mp.jLabel_Folio.getText(), mp.PRODUCTOS[i][9], mp.PRODUCTOS[i][5], mp.PRODUCTOS[i][7]);
+            //p.SetDatos(""+r.getNOTA_REP(), mp.PRODUCTOS[i][9], mp.PRODUCTOS[i][7], Double.parseDouble("5"), Double.parseDouble("5"), Double.parseDouble(mp.PRODUCTOS[i][8]));
+            System.out.println("\nRegistro no. "+i+":\n\nID de REPORTE: "+r.getNOTA_REP()+"   ID de PRODUCTO: "+mp.PRODUCTOS[i][9]+"   Cantidad: "+p.getCAN_PAR()+"   SubTotal: "+p.getSUBT_PAR()+"   IVA: "+p.getIVA_PAR()+"   Total: "+p.getTOT_PAR());
+            p.SubirDatosPartidas();}
+        JOptionPane.showMessageDialog(null, "Registro añadido con éxito");
+        dispose();
     }//GEN-LAST:event_jButton_ConfirmarMouseClicked
 
     /**
@@ -263,6 +291,7 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Cancelar;
     private javax.swing.JButton jButton_Confirmar;
+    private javax.swing.JComboBox<String> jComboBox_FP;
     private javax.swing.JLabel jLabel_Folio;
     private javax.swing.JLabel jLabel_Folio_S;
     private javax.swing.JLabel jLabel_RegistroProd;

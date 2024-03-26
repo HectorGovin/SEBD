@@ -57,6 +57,7 @@ public class Reportes {
             setID_CLIE(IDClie);
             setNOTA_REP(Nota);
             setFP_REP(FP);
+            SubirDatosReportes();
     }
     
     public void SubirDatosReportes(){

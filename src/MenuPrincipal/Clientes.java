@@ -78,7 +78,7 @@ public class Clientes {
                 CLIENTES = new String[res.getInt(CP_CLIE)]
             }*/
             
-            ps = con.prepareStatement("SELECT * FROM CLIENTES");
+            ps = con.prepareStatement("SELECT * FROM CLIENTES WHERE ID_CLIE != 1");
             res = ps.executeQuery(); int m = 0;
             while(res.next()){
                 NOMBRES[m] = ("" + res.getString("NOM_CLIE"));
