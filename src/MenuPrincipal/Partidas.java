@@ -66,18 +66,6 @@ public class Partidas {
         return con;
     }
     
-    public void Setiar(){
-    }
-    
-    /*public void SetDatos(String Nota, String IDProd, String Cant, double SubT, double IVA, double Tot){
-        setNOTA_REP(Integer.parseInt(Nota));
-        setID_PROD(Integer.parseInt(IDProd));
-        setCAN_PAR(Integer.parseInt(Cant));
-        setSUBT_PAR(SubT);
-        setIVA_PAR(IVA);
-        setTOT_PAR(Tot);
-    }*/
-    
     public void SetDatos(String Nota, String IDProd, String Precio, String Cant){
         setNOTA_REP(Integer.parseInt(Nota));
         setID_PROD(Integer.parseInt(IDProd));

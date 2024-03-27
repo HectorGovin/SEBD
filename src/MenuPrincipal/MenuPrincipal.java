@@ -50,7 +50,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         return PRODUCTOS;
     }
     
-    public void CargarTabla(){
+    private void CargarTabla(){
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
         PRODUCTOS,
         new String [] {
@@ -76,6 +76,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
         jTextField_Total.setText(""+sum);
         ConsultaFolio();
+        ValidarSubT_IVA();
+    }
+    
+    private void ValidarSubT_IVA(){
+        double SUBT = Double.parseDouble(jTextField_Total.getText()) / 1.16;
+        jTextField_Subtotal.setText(String.format("%.2f", SUBT));
+        double IVA = Double.parseDouble(jTextField_Subtotal.getText()) * .16;
+        jTextField_Impuesto.setText(String.format("%.2f", IVA));
     }
     
     private void ValidarCantidades(){
@@ -258,6 +266,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tablaPRODUCTOS);
 
         jButton_VentasHoy.setText("VENTAS DE HOY");
+        jButton_VentasHoy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_VentasHoyMouseClicked(evt);
+            }
+        });
 
         jButton_CobroClienteU.setText("COBRO CLIENTE USUAL");
         jButton_CobroClienteU.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -554,6 +567,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void jMenu_ClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_ClientesMouseClicked
         new ConsultaClientes().setVisible(true);
     }//GEN-LAST:event_jMenu_ClientesMouseClicked
+
+    private void jButton_VentasHoyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_VentasHoyMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton_VentasHoyMouseClicked
 
     /**
      * @param args the command line arguments
