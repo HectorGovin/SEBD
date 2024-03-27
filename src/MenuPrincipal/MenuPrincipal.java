@@ -480,6 +480,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuBar_Principal.add(jMenu_Reportes);
 
         jMenu_Clientes.setText("Clientes");
+        jMenu_Clientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu_ClientesMouseClicked(evt);
+            }
+        });
         jMenuBar_Principal.add(jMenu_Clientes);
 
         jMenu_Usuarios.setText("Usuarios");
@@ -507,11 +512,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenu_ProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_ProductosMouseClicked
-        new ConsultasProductos().setVisible(true);
+        new ConsultaAA().setVisible(true);
     }//GEN-LAST:event_jMenu_ProductosMouseClicked
 
     private void jMenu_UsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_UsuariosMouseClicked
-        new ConsultasUsuarios().setVisible(true);
+        new ConsultaUsuarios().setVisible(true);
     }//GEN-LAST:event_jMenu_UsuariosMouseClicked
 
     private void jTextField_ProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ProductoKeyReleased
@@ -545,6 +550,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         PRODUCTOStab = new String[50][10];
         CargarTabla();
     }//GEN-LAST:event_jButton_ActualizarMouseClicked
+
+    private void jMenu_ClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_ClientesMouseClicked
+        new ConsultaClientes().setVisible(true);
+    }//GEN-LAST:event_jMenu_ClientesMouseClicked
 
     /**
      * @param args the command line arguments
@@ -614,7 +623,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField_Impuesto;
     private javax.swing.JTextField jTextField_Producto;
     private javax.swing.JTextField jTextField_Subtotal;
-    private javax.swing.JTextField jTextField_Total;
+    public javax.swing.JTextField jTextField_Total;
     private javax.swing.JTable tablaPRODUCTOS;
     // End of variables declaration//GEN-END:variables
 }

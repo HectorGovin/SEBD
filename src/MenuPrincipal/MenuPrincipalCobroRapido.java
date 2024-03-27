@@ -237,7 +237,7 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaPRODUCTOSMouseClicked
 
     private void jButton_ConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ConfirmarMouseClicked
-        r.SetDatos(1, 1, mp.jLabel_Folio.getText(), ""+jComboBox_FP.getSelectedItem());
+        r.SetDatos(1, 1, mp.jLabel_Folio.getText(), ""+jComboBox_FP.getSelectedItem(), mp.jTextField_Total.getText());
         mp.EnviarPRODUCTOSaPartidas();
         System.out.println("\n\n");
         System.out.println("\nSí pasó por aqui");
