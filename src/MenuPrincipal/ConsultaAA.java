@@ -111,6 +111,48 @@ public class ConsultaAA extends javax.swing.JFrame {
         }
     }
     
+        private void BuscarPRODUCTOS(String buscar){
+        int i = 0;
+        try{
+            Connection con = null;
+            con = getConection();
+            
+            PreparedStatement ps;
+            ResultSet res;
+            
+            ps = con.prepareStatement("SELECT COUNT(ID_PROD) FROM PRODUCTOS WHERE CAT_PROD='AA' OR CAT_PROD='FERRETERIA'");
+            res = ps.executeQuery();
+            
+            if(res.next())
+                PRODUCTOS = new String[res.getInt("COUNT(ID_PROD)")][10];
+            
+            ps = con.prepareStatement("SELECT * FROM PRODUCTOS WHERE CODIGO_PROD LIKE '%"+buscar+"%' OR DES_PROD LIKE '%"+buscar+"%' HAVING CAT_PROD='AA' OR CAT_PROD='FERRETERIA'");
+            res = ps.executeQuery();
+            int cero;
+            String zero;
+            while(res.next())
+            {
+                cero = res.getInt("ID_PROD");
+                PRODUCTOS[i][0] = String.format("%04d", cero);
+                PRODUCTOS[i][1] = ("" + res.getString("CODIGO_PROD"));
+                PRODUCTOS[i][2] = ("" + res.getString("SERIE_PROD"));
+                PRODUCTOS[i][3] = ("" + res.getString("CAT_PROD"));                
+                PRODUCTOS[i][4] = ("" + res.getString("DES_PROD"));
+                PRODUCTOS[i][5] = ("" + res.getString("PRG_PROD"));
+                PRODUCTOS[i][6] = ("" + res.getString("PRT_PROD"));
+                PRODUCTOS[i][7] = ("" + res.getString("UM_PROD"));
+                PRODUCTOS[i][8] = ("" + res.getString("DIM_PROD"));
+                cero = res.getInt("STOCK_PROD");
+                PRODUCTOS[i][9] = String.format("%04d", cero);
+                i++;
+            }
+            CargarTabla();
+            
+        } catch(SQLException e){
+            System.out.println(e);
+        }
+    }
+    
     public void eliminar(){
         int row = tablaPRODUCTOS.getSelectedRow();
         String value = tablaPRODUCTOS.getModel().getValueAt(row, 0).toString();
@@ -133,6 +175,14 @@ public class ConsultaAA extends javax.swing.JFrame {
         objetoProductos.ModificarProducto(jTextField_ID, jTextField_CB, jTextField_Serie, jComboBox_Categoria, jTextField_UM, jTextArea, jTextField_PG, jTextField_PT, jTextField_DIM, jTextField_STOCK);
     }
     
+    public void cb(){
+        int row = tablaPRODUCTOS.getSelectedRow();
+        String value = tablaPRODUCTOS.getModel().getValueAt(row, 1).toString();
+        
+        Productos ObjetoProductos = new Productos();
+        ObjetoProductos.CB(value);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -145,10 +195,10 @@ public class ConsultaAA extends javax.swing.JFrame {
         tablaPRODUCTOS = new javax.swing.JTable();
         jButton_Productos = new javax.swing.JButton();
         jButton_Servicios = new javax.swing.JButton();
-        jButton_Buscar = new javax.swing.JButton();
         jButton_Agregar = new javax.swing.JButton();
         jButton_Eliminar = new javax.swing.JButton();
         jButton_Actualizar = new javax.swing.JButton();
+        jButton_CB = new javax.swing.JButton();
         jPanel_ID = new javax.swing.JPanel();
         jTextField_ID = new javax.swing.JTextField();
         jPanel_Serie = new javax.swing.JPanel();
@@ -184,6 +234,15 @@ public class ConsultaAA extends javax.swing.JFrame {
         jLabel_Buscar.setForeground(new java.awt.Color(255, 255, 255));
         jLabel_Buscar.setText("Buscar producto:");
 
+        jTextField_Buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField_BuscarKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField_BuscarKeyReleased(evt);
+            }
+        });
+
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -213,13 +272,6 @@ public class ConsultaAA extends javax.swing.JFrame {
             }
         });
 
-        jButton_Buscar.setText("Buscar");
-        jButton_Buscar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_BuscarMouseClicked(evt);
-            }
-        });
-
         jButton_Agregar.setText("Agregar");
         jButton_Agregar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -246,6 +298,13 @@ public class ConsultaAA extends javax.swing.JFrame {
             }
         });
 
+        jButton_CB.setText("Generar Código de barras");
+        jButton_CB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_CBMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel_OpcionesLayout = new javax.swing.GroupLayout(jPanel_Opciones);
         jPanel_Opciones.setLayout(jPanel_OpcionesLayout);
         jPanel_OpcionesLayout.setHorizontalGroup(
@@ -258,18 +317,18 @@ public class ConsultaAA extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_Eliminar)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton_Actualizar))
+                        .addComponent(jButton_Actualizar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton_CB))
                     .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
                         .addComponent(jLabel_Buscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Buscar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton_Productos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_Servicios)))
-                .addContainerGap(385, Short.MAX_VALUE))
+                .addContainerGap(466, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
         );
         jPanel_OpcionesLayout.setVerticalGroup(
@@ -280,15 +339,16 @@ public class ConsultaAA extends javax.swing.JFrame {
                     .addComponent(jLabel_Buscar)
                     .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_Productos)
-                    .addComponent(jButton_Servicios)
-                    .addComponent(jButton_Buscar))
+                    .addComponent(jButton_Servicios))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_Agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_Actualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton_Agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_Actualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton_CB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(13, 13, 13))
         );
 
@@ -605,10 +665,6 @@ public class ConsultaAA extends javax.swing.JFrame {
         new AgregarProductos().setVisible(true);
     }//GEN-LAST:event_jButton_AgregarMouseClicked
 
-    private void jButton_BuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_BuscarMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_BuscarMouseClicked
-
     private void jButton_ServiciosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ServiciosMouseClicked
         new ConsultaServicios().setVisible(true);
         this.setVisible(false);
@@ -619,7 +675,7 @@ public class ConsultaAA extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_AgregarActionPerformed
 
     private void jButton_ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ActualizarActionPerformed
-        actualizar();
+    actualizar();
     }//GEN-LAST:event_jButton_ActualizarActionPerformed
 
     private void tablaPRODUCTOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPRODUCTOSMouseClicked
@@ -630,6 +686,18 @@ public class ConsultaAA extends javax.swing.JFrame {
     modificar();
     actualizar();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyReleased
+    BuscarPRODUCTOS(jTextField_Buscar.getText());
+    }//GEN-LAST:event_jTextField_BuscarKeyReleased
+
+    private void jTextField_BuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyPressed
+
+    }//GEN-LAST:event_jTextField_BuscarKeyPressed
+
+    private void jButton_CBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_CBMouseClicked
+    cb();
+    }//GEN-LAST:event_jButton_CBMouseClicked
 
     /**
      * @param args the command line arguments
@@ -677,7 +745,7 @@ public class ConsultaAA extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton_Actualizar;
     private javax.swing.JButton jButton_Agregar;
-    private javax.swing.JButton jButton_Buscar;
+    private javax.swing.JButton jButton_CB;
     private javax.swing.JButton jButton_Eliminar;
     private javax.swing.JButton jButton_Productos;
     private javax.swing.JButton jButton_Servicios;

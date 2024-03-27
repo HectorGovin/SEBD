@@ -89,9 +89,9 @@
                       </Group>
                   </Group>
                   <EmptySpace pref="27" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jButton_Cancelar" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
-                      <Component id="jButton_Guardar" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                      <Component id="jButton_Guardar" min="-2" pref="40" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
               </Group>

@@ -5,6 +5,19 @@
 package MenuPrincipal;
 
 import Practica01.Conexion;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.Barcode128;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfContentByte;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -14,6 +27,8 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static javax.swing.UIManager.getString;
 import static javax.swing.UIManager.getInt;
 import javax.swing.table.DefaultTableModel;
@@ -308,6 +323,8 @@ public class Productos {
         
         String consulta = "UPDATE productos SET CODIGO_PROD=?, SERIE_PROD=?, CAT_PROD=?, UM_PROD=?, DES_PROD=?, PRG_PROD=?, PRT_PROD=?, DIM_PROD=?, STOCK_PROD=? WHERE ID_PROD=?;";
         
+        
+        
         try{
             
             CallableStatement cs = objetoConexion.conectar().prepareCall(consulta);
@@ -386,4 +403,55 @@ public class Productos {
             
         }
 }
+        
+        public void CB(String paramCB){
+        
+        Image img;
+        
+        setCODIGO_PROD(paramCB);
+    
+        Conexion objetoConexion = new Conexion();
+        
+        String consulta = "select * from productos";
+        Statement st;
+        
+        
+        try {
+            
+            st= objetoConexion.conectar().createStatement();
+            ResultSet rs = st.executeQuery(consulta);
+            getString(paramCB);
+            
+            Document doc = new Document();
+            PdfWriter pdf = PdfWriter.getInstance(doc, new FileOutputStream(paramCB+".pdf"));
+            doc.open();
+            
+            
+
+            for(int i = 0; i < 12; i++){
+                
+            Barcode128 code = new Barcode128();
+            code.setCode(paramCB);
+            img = code.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
+            
+            doc.add(img);
+            
+            doc.add(new Paragraph(" "));
+            
+            }
+            
+            doc.close();
+            
+            JOptionPane.showMessageDialog(null,"Se guardó correctamente el código de barras");
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+        
 }

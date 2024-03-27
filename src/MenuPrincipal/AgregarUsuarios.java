@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Wilbert
  */
-public class AgregarUsuarios extends javax.swing.JFrame { 
+public class AgregarUsuarios extends javax.swing.JFrame{ 
     
     public void guardar(){
         Usuarios ObjetoUsuarios = new Usuarios();
@@ -291,7 +291,7 @@ public class AgregarUsuarios extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jPanel_CONTRA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addGroup(jPanel_FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel_FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton_Cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23))
@@ -370,7 +370,7 @@ public class AgregarUsuarios extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel_NOM;
     private javax.swing.JPanel jPanel_TEL;
     private javax.swing.JScrollPane jScrollPane;
-    private javax.swing.JTextArea jTextArea_NOM;
+    public javax.swing.JTextArea jTextArea_NOM;
     public javax.swing.JTextField jTextField_CARGO;
     public javax.swing.JTextField jTextField_CONTRA;
     public javax.swing.JTextField jTextField_ID;

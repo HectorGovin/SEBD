@@ -120,15 +120,13 @@
                               <Component id="jLabel_Buscar" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jTextField_Buscar" min="-2" pref="193" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton_Buscar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButton_Productos" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jButton_Servicios" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="1088" max="32767" attributes="0"/>
+                      <EmptySpace pref="1172" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -142,7 +140,6 @@
                           <Component id="jTextField_Buscar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_Productos" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_Servicios" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton_Buscar" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" pref="481" max="32767" attributes="0"/>
@@ -170,6 +167,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField_Buscar">
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_BuscarKeyReleased"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
               <AuxValues>
@@ -212,14 +212,6 @@
                 <Property name="text" type="java.lang.String" value="Servicios"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButton_Buscar">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Buscar"/>
-              </Properties>
-              <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton_BuscarMouseClicked"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton_Agregar">
               <Properties>

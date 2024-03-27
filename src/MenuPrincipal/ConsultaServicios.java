@@ -98,6 +98,41 @@ public class ConsultaServicios extends javax.swing.JFrame {
         }
     }
     
+        private void BuscarSERVICIOS(String buscar){
+        int i = 0;
+        try{
+            Connection con = null;
+            con = getConection();
+            
+            PreparedStatement ps;
+            ResultSet res;
+            
+            ps = con.prepareStatement("SELECT COUNT(ID_PROD) FROM PRODUCTOS WHERE CAT_PROD='SERVICIOS'");
+            res = ps.executeQuery();
+            
+            if(res.next())
+                PRODUCTOS = new String[res.getInt("COUNT(ID_PROD)")][4];
+            
+            ps = con.prepareStatement("SELECT * FROM PRODUCTOS WHERE DES_PROD LIKE '%"+buscar+"%' HAVING CAT_PROD='SERVICIOS'");
+            res = ps.executeQuery();
+            int cero;
+            while(res.next())
+            {
+                cero = res.getInt("ID_PROD");
+                PRODUCTOS[i][0] = String.format("%04d", cero);
+                PRODUCTOS[i][1] = ("" + res.getString("DES_PROD"));
+                PRODUCTOS[i][2] = ("" + res.getString("CAT_PROD"));
+                PRODUCTOS[i][3] = ("" + res.getString("PRG_PROD"));
+                i++;
+            }
+            
+            CargarTabla();
+            
+        } catch(SQLException e){
+            System.out.println(e);
+        }
+    }
+    
     public void eliminar(){
         int row = tablaPRODUCTOS.getSelectedRow();
         String value = tablaPRODUCTOS.getModel().getValueAt(row, 0).toString();
@@ -132,7 +167,6 @@ public class ConsultaServicios extends javax.swing.JFrame {
         tablaPRODUCTOS = new javax.swing.JTable();
         jButton_Productos = new javax.swing.JButton();
         jButton_Servicios = new javax.swing.JButton();
-        jButton_Buscar = new javax.swing.JButton();
         jButton_Agregar = new javax.swing.JButton();
         jButton_Eliminar = new javax.swing.JButton();
         jButton_Actualizar = new javax.swing.JButton();
@@ -158,6 +192,12 @@ public class ConsultaServicios extends javax.swing.JFrame {
         jLabel_Buscar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel_Buscar.setForeground(new java.awt.Color(255, 255, 255));
         jLabel_Buscar.setText("Buscar servicio:");
+
+        jTextField_Buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField_BuscarKeyReleased(evt);
+            }
+        });
 
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -187,13 +227,6 @@ public class ConsultaServicios extends javax.swing.JFrame {
 
         jButton_Servicios.setText("Servicios");
         jButton_Servicios.setEnabled(false);
-
-        jButton_Buscar.setText("Buscar");
-        jButton_Buscar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_BuscarMouseClicked(evt);
-            }
-        });
 
         jButton_Agregar.setText("Agregar");
         jButton_Agregar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -233,13 +266,11 @@ public class ConsultaServicios extends javax.swing.JFrame {
                         .addComponent(jLabel_Buscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Buscar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton_Productos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_Servicios)))
-                .addContainerGap(1088, Short.MAX_VALUE))
+                .addContainerGap(1172, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
         );
         jPanel_OpcionesLayout.setVerticalGroup(
@@ -250,8 +281,7 @@ public class ConsultaServicios extends javax.swing.JFrame {
                     .addComponent(jLabel_Buscar)
                     .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_Productos)
-                    .addComponent(jButton_Servicios)
-                    .addComponent(jButton_Buscar))
+                    .addComponent(jButton_Servicios))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -433,10 +463,6 @@ public class ConsultaServicios extends javax.swing.JFrame {
         new AgregarServicios().setVisible(true);
     }//GEN-LAST:event_jButton_AgregarMouseClicked
 
-    private void jButton_BuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_BuscarMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_BuscarMouseClicked
-
     private void jButton_ProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ProductosMouseClicked
         new ConsultaAA().setVisible(true);
         this.setVisible(false);
@@ -450,6 +476,10 @@ public class ConsultaServicios extends javax.swing.JFrame {
     private void tablaPRODUCTOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPRODUCTOSMouseClicked
     seleccionar();
     }//GEN-LAST:event_tablaPRODUCTOSMouseClicked
+
+    private void jTextField_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyReleased
+    BuscarSERVICIOS(jTextField_Buscar.getText());
+    }//GEN-LAST:event_jTextField_BuscarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -505,7 +535,6 @@ public class ConsultaServicios extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton_Actualizar;
     private javax.swing.JButton jButton_Agregar;
-    private javax.swing.JButton jButton_Buscar;
     private javax.swing.JButton jButton_Eliminar;
     private javax.swing.JButton jButton_Productos;
     private javax.swing.JButton jButton_Servicios;

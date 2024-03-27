@@ -1,5 +1,4 @@
 package MenuPrincipal;
-import static MenuPrincipal.MenuPrincipalConsultaServicios.getConection;
 import java.sql.*;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -100,6 +99,42 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
             System.out.println(e);
         }
     }
+
+        private void BuscarUSUARIOS(String buscar){
+        int i = 0;
+        try{
+            Connection con = null;
+            con = getConection();
+            
+            PreparedStatement ps;
+            ResultSet res;
+            
+            ps = con.prepareStatement("SELECT COUNT(ID_USU) FROM USUARIOS");
+            res = ps.executeQuery();
+            
+            if(res.next())
+                USUARIOS = new String[res.getInt("COUNT(ID_USU)")][5];
+            
+            ps = con.prepareStatement("SELECT * FROM USUARIOS WHERE NOM_USU LIKE '%"+buscar+"%'");
+            res = ps.executeQuery();
+            int cero;
+            while(res.next())
+            {
+                cero = res.getInt("ID_USU");
+                USUARIOS[i][0] = String.format("%02d", cero);
+                USUARIOS[i][1] = ("" + res.getString("NOM_USU"));
+                USUARIOS[i][2] = ("" + res.getString("TELF_USU"));
+                USUARIOS[i][3] = ("" + res.getString("CARGO_USU"));
+                USUARIOS[i][4] = ("" + res.getString("PSSWD_USU"));
+                i++;
+            }
+            
+            CargarTabla();
+            
+        } catch(SQLException e){
+            System.out.println(e);
+        }
+    }
     
     public void eliminar(){
         int row = tablaUSUARIOS.getSelectedRow();
@@ -133,7 +168,6 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
         jTextField_Buscar = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaUSUARIOS = new javax.swing.JTable();
-        jButton_Buscar = new javax.swing.JButton();
         jButton_Agregar = new javax.swing.JButton();
         jButton_Eliminar = new javax.swing.JButton();
         jButton_Actualizar = new javax.swing.JButton();
@@ -162,6 +196,12 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
         jLabel_Buscar.setForeground(new java.awt.Color(255, 255, 255));
         jLabel_Buscar.setText("Buscar usuario:");
 
+        jTextField_Buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField_BuscarKeyReleased(evt);
+            }
+        });
+
         tablaUSUARIOS.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -180,13 +220,6 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tablaUSUARIOS);
-
-        jButton_Buscar.setText("Buscar");
-        jButton_Buscar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_BuscarMouseClicked(evt);
-            }
-        });
 
         jButton_Agregar.setText("Agregar");
         jButton_Agregar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -225,10 +258,8 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
                     .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
                         .addComponent(jLabel_Buscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Buscar)))
-                .addContainerGap(1301, Short.MAX_VALUE))
+                        .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(1385, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
         );
         jPanel_OpcionesLayout.setVerticalGroup(
@@ -237,8 +268,7 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_Buscar)
-                    .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_Buscar))
+                    .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -445,10 +475,6 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
         new AgregarUsuarios().setVisible(true);
     }//GEN-LAST:event_jButton_AgregarMouseClicked
 
-    private void jButton_BuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_BuscarMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_BuscarMouseClicked
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     modificar();
     actualizar();
@@ -457,6 +483,10 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
     private void tablaUSUARIOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaUSUARIOSMouseClicked
     seleccionar();
     }//GEN-LAST:event_tablaUSUARIOSMouseClicked
+
+    private void jTextField_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyReleased
+    BuscarUSUARIOS(jTextField_Buscar.getText());
+    }//GEN-LAST:event_jTextField_BuscarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -528,7 +558,6 @@ public class ConsultaUsuarios extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton_Actualizar;
     private javax.swing.JButton jButton_Agregar;
-    private javax.swing.JButton jButton_Buscar;
     private javax.swing.JButton jButton_Eliminar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel_Buscar;
