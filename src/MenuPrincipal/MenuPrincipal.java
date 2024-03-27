@@ -32,9 +32,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         return con;
     }
     
-    public void Limpiar(){
-    }
-    
     private void EstablecerFecha(){
         SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
         Calendar c = Calendar.getInstance();
@@ -203,7 +200,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jLabel_FH_S.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel_FH_S.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel_FH_S.setText("Fecha y hora:");
+        jLabel_FH_S.setText("Fecha:");
         jLabel_FH_S.setToolTipText("");
 
         jLabel_FechaHora.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
@@ -569,7 +566,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu_ClientesMouseClicked
 
     private void jButton_VentasHoyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_VentasHoyMouseClicked
-        // TODO add your handling code here:
+        new ConsultaReportes().setVisible(true);
     }//GEN-LAST:event_jButton_VentasHoyMouseClicked
 
     /**
