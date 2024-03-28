@@ -10,7 +10,7 @@ import java.text.*;
 public class MenuPrincipal extends javax.swing.JFrame {
     
     public static String[][] PRODUCTOS = new String[50][10];
-    public static String[][] PRODUCTOStab = new String[50][10];
+    public static String[][] PRODUCTOSenviar = new String[50][10];
     int contadorProd;
     public static final String URL = "jdbc:mysql://localhost:3306/sebd", USERNAME = "root", PASSWORD = "";
     
@@ -19,6 +19,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.setExtendedState(this.MAXIMIZED_BOTH);
         CargarTabla();
         EstablecerFecha();
+    }
+    
+    public String[][] EnviarPRODUCTOS(){
+        return PRODUCTOSenviar;
+    }
+    
+    public String[][] EnviarPRODUCTOSaPartidas(){
+        return PRODUCTOS;
     }
     
     public static Connection getConection(){
@@ -39,21 +47,42 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel_FechaHora.setText(date);
     }
     
-    public String[][] EnviarPRODUCTOS(){
-        return PRODUCTOStab;
-    }
-    
-    public String[][] EnviarPRODUCTOSaPartidas(){
-        return PRODUCTOS;
-    }
-    
     private void CargarTabla(){
+        float sum = 0;
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
         PRODUCTOS,
         new String [] {
             "COD DE BARRAS", "SERIE", "DESCRIPCION", "CATEGORIA", "U.M", "$ GENERAL", "$ TECNICO", "CANTIDAD"
         }
         ));
+        EstablecerTamañoColumnas();
+        for(int x=0; PRODUCTOS[x][8]!=null; x++){
+            sum+= Float.parseFloat(PRODUCTOS[x][8]);
+        }
+        jTextField_Total.setText(""+sum);
+        ConsultaFolio();
+        ValidarSubT_IVA();
+    }
+    
+    public void ConsultaFolio(){
+        try{
+            Connection con = null;
+            con = getConection();
+            PreparedStatement ps;
+            ResultSet res;
+            ps = con.prepareStatement("SELECT MAX(ID_REP) AS ID_REP FROM REPORTES");
+            res = ps.executeQuery(); 
+            int ow = 0;
+            if(res.next()){
+                ow = res.getInt("ID_REP")+1;
+            }
+            String s = String.format("%04d", ow);
+            jLabel_Folio.setText(s);
+            
+        } catch(Exception ex){JOptionPane.showMessageDialog(null, "Error en la consulta del folio: "+ex.toString());}
+    }
+    
+    private void EstablecerTamañoColumnas(){
         TableColumn c;
         c = tablaPRODUCTOS.getColumnModel().getColumn(0);
         c.setMaxWidth(120); c.setMinWidth(120); c.setResizable(false); 
@@ -67,13 +96,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
             c = tablaPRODUCTOS.getColumnModel().getColumn(cx);
             c.setMaxWidth(80); c.setMinWidth(80); c.setResizable(false); 
         }
-        float sum = 0;
-        for(int x=0; PRODUCTOS[x][8]!=null; x++){
-            sum+= Float.parseFloat(PRODUCTOS[x][8]);
-        }
-        jTextField_Total.setText(""+sum);
-        ConsultaFolio();
-        ValidarSubT_IVA();
     }
     
     private void ValidarSubT_IVA(){
@@ -104,24 +126,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
     }
     
-    public void ConsultaFolio(){
-        try{
-            Connection con = null;
-            con = getConection();
-            PreparedStatement ps;
-            ResultSet res;
-            ps = con.prepareStatement("SELECT MAX(ID_REP) AS ID_REP FROM REPORTES");
-            res = ps.executeQuery(); int ow = 0;
-            if(res.next()){
-                ow = res.getInt("ID_REP");
-            }
-            int xds = ow+1;
-            String s = String.format("%04d", xds);
-            jLabel_Folio.setText(s);
-            
-        } catch(Exception ex){JOptionPane.showMessageDialog(null, "Error en la consulta del folio: "+ex.toString());}
-    }
-    
     private void ConsultaProductos(int m){
         String cod = jTextField_Producto.getText();
         try{
@@ -135,16 +139,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 PRODUCTOS[m][0] = ("" + res.getString("CODIGO_PROD")); 
                 PRODUCTOS[m][1] = ("" + res.getString("SERIE_PROD"));
                 PRODUCTOS[m][2] = ("" + res.getString("DES_PROD")); 
-                PRODUCTOStab[m][0]=PRODUCTOS[m][2];
                 PRODUCTOS[m][3] = ("" + res.getString("CAT_PROD")); 
                 PRODUCTOS[m][4] = ("" + res.getString("UM_PROD"));
                 PRODUCTOS[m][5] = ("" + res.getString("PRG_PROD")); 
                 PRODUCTOS[m][6] = ("" + res.getString("PRT_PROD"));
                 PRODUCTOS[m][9] = ("" + res.getInt("ID_PROD"));
+                PRODUCTOSenviar[m][0]=PRODUCTOS[m][2];
             }
-            PRODUCTOStab[m][1]=PRODUCTOS[m][7]; //CANTIDAD
+            PRODUCTOSenviar[m][1]=PRODUCTOS[m][7]; //CANTIDAD
             PRODUCTOS[m][8] = ""+(Float.parseFloat(PRODUCTOS[m][5]) * Float.parseFloat(PRODUCTOS[m][7])); 
-            PRODUCTOStab[m][2]=PRODUCTOS[m][8];
+            PRODUCTOSenviar[m][2]=PRODUCTOS[m][8];
             CargarTabla();
         }catch(SQLException e){
             System.out.println(e);
@@ -562,7 +566,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jButton_ActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ActualizarMouseClicked
         PRODUCTOS = new String[50][10];
-        PRODUCTOStab = new String[50][10];
+        PRODUCTOSenviar = new String[50][10];
         CargarTabla();
     }//GEN-LAST:event_jButton_ActualizarMouseClicked
 

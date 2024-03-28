@@ -48,7 +48,7 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
     private void CargarTabla(){
         mp.EnviarPRODUCTOS();
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
-        mp.PRODUCTOStab,
+        mp.PRODUCTOSenviar,
         new String [] {
             "DESCRIPCION", "CANTIDAD", "COBRO"
         }
