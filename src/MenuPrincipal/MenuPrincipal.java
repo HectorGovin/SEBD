@@ -487,6 +487,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuBar_Principal.add(jMenu_Productos);
 
         jMenu_Reportes.setText("Reportes");
+        jMenu_Reportes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu_ReportesMouseClicked(evt);
+            }
+        });
         jMenuBar_Principal.add(jMenu_Reportes);
 
         jMenu_Clientes.setText("Clientes");
@@ -566,8 +571,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu_ClientesMouseClicked
 
     private void jButton_VentasHoyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_VentasHoyMouseClicked
-        new ConsultaReportes().setVisible(true);
+        
     }//GEN-LAST:event_jButton_VentasHoyMouseClicked
+
+    private void jMenu_ReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_ReportesMouseClicked
+        new ConsultaReportes().setVisible(true);
+    }//GEN-LAST:event_jMenu_ReportesMouseClicked
 
     /**
      * @param args the command line arguments
