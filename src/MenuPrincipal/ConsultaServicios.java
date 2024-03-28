@@ -1,6 +1,7 @@
 package MenuPrincipal;
 import static MenuPrincipal.MenuPrincipalConsultaServicios.getConection;
 import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -455,8 +456,11 @@ public class ConsultaServicios extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_ActualizarActionPerformed
 
     private void jButton_EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EliminarActionPerformed
-        eliminar();
-        actualizar();
+        int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el servicio seleccionado?", "Eliminar", JOptionPane.YES_NO_OPTION);
+        if(respuesta == 0){
+            eliminar();
+            actualizar();
+        }
     }//GEN-LAST:event_jButton_EliminarActionPerformed
 
     private void jButton_AgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_AgregarMouseClicked
@@ -469,8 +473,11 @@ public class ConsultaServicios extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_ProductosMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    modificar();
-    actualizar();
+    int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro que deseas realizar la modificación?", "Modificar", JOptionPane.YES_NO_OPTION);
+        if(respuesta == 0){
+            modificar();
+            actualizar();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void tablaPRODUCTOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPRODUCTOSMouseClicked

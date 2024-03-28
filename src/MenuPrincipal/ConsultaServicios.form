@@ -126,7 +126,7 @@
                               <Component id="jButton_Servicios" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="1172" max="32767" attributes="0"/>
+                      <EmptySpace pref="1212" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>

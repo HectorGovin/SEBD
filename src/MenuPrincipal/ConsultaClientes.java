@@ -1,5 +1,6 @@
 package MenuPrincipal;
 import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -576,8 +577,11 @@ public class ConsultaClientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EliminarActionPerformed
-        eliminar();
-        actualizar();
+        int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el cliente seleccionado?", "Eliminar", JOptionPane.YES_NO_OPTION);
+        if(respuesta == 0){
+            eliminar();
+            actualizar();
+        }
     }//GEN-LAST:event_jButton_EliminarActionPerformed
 
     private void jButton_AgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_AgregarMouseClicked
@@ -597,8 +601,11 @@ public class ConsultaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_tablaCLIENTESMouseClicked
 
     private void jButton_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuardarActionPerformed
-    modificar();
-    actualizar();
+    int respuesta = JOptionPane.showConfirmDialog(null, "¿Estás seguro que deseas realizar la modificación?", "Modificar", JOptionPane.YES_NO_OPTION);
+        if(respuesta == 0){
+            modificar();
+            actualizar();
+        }
     }//GEN-LAST:event_jButton_GuardarActionPerformed
 
     private void jTextField_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyReleased
