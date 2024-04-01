@@ -36,21 +36,18 @@ public class ConsultaAA extends javax.swing.JFrame {
     }
     
     private void CargarTabla(){
-        
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
             PRODUCTOS,
             new String [] {
                 "ID", "COD DE BARRAS", "SERIE", "CATEGORIA", "DESCRIPCION", "$ GENERAL", "$ TECNICO", "U.M", "DIM", "STOCK"
             }
             ));
-        
         TableRowSorter<TableModel> OrdenarTabla = new TableRowSorter<TableModel>(new javax.swing.table.DefaultTableModel(
             PRODUCTOS,
             new String [] {
                 "ID", "COD DE BARRAS", "SERIE", "CATEGORIA", "DESCRIPCION", "$ GENERAL", "$ TECNICO", "U.M" ,"DIM", "STOCK"
             }
             ));
-        
         tablaPRODUCTOS.setRowSorter(OrdenarTabla);
         
         TableColumn c;

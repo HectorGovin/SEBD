@@ -29,6 +29,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         return PRODUCTOS;
     }
     
+    public javax.swing.JButton jButton_Actualizar2;
+    
+    public javax.swing.JTextField Enviar(){
+        return jTextField_Total;
+    }
+    
     public static Connection getConection(){
         Connection con = null;
         try{
@@ -62,6 +68,27 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jTextField_Total.setText(""+sum);
         ConsultaFolio();
         ValidarSubT_IVA();
+    }
+    
+    public void CargarTabla2(javax.swing.JTable A){
+        float sum = 0;
+        A.setModel(new javax.swing.table.DefaultTableModel(
+        PRODUCTOS,
+        new String [] {
+            "COD DE BARRAS", "SERIE", "DESCRIPCION", "CATEGORIA", "U.M", "$ GENERAL", "$ TECNICO", "CANTIDAD"
+        }
+        ));
+        //EstablecerTamañoColumnas();
+        for(int x=0; PRODUCTOS[x][8]!=null; x++){
+            sum+= Float.parseFloat(PRODUCTOS[x][8]);
+        }
+        jTextField_Total.setText(""+sum);
+        ConsultaFolio();
+        ValidarSubT_IVA();
+    }
+    
+    public javax.swing.JTable Get_EnviarTabla(){
+        return tablaPRODUCTOS;
     }
     
     public void ConsultaFolio(){
@@ -153,7 +180,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }catch(SQLException e){
             System.out.println(e);
         }
-    }
+    }       
+    
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

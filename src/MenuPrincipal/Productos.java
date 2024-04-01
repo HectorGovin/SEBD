@@ -251,7 +251,6 @@ public class Productos {
         
     }
     
-    
     public void SeleccionarProductos(JTable paramTablaProductos, JTextField paramID, JTextField paramCB, JTextField paramSerie, JComboBox paramCat, JTextField paramUM, JTextArea paramDes, JTextField paramPRG, JTextField paramPRT, JTextField paramDIM, JTextField paramStock){
         
         try{
@@ -275,7 +274,6 @@ public class Productos {
             JOptionPane.showMessageDialog(null, "Error de seleccion, error: "+ex.toString());
         }
     }
-    
     
     public void ModificarProducto(String paramID, JTextField paramCB, JTextField paramSerie, JComboBox paramCat, JTextField paramUM, JTextArea paramDes, JTextField paramPRG, JTextField paramPRT, JTextField paramDIM, JTextField paramStock){
         setID_PROD(Integer.parseInt(paramID));

@@ -239,6 +239,7 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
     private void jButton_ConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ConfirmarMouseClicked
         r.SetDatos(1, 1, mp.jLabel_Folio.getText(), ""+jComboBox_FP.getSelectedItem(), mp.jTextField_Total.getText());
         mp.EnviarPRODUCTOSaPartidas();
+        mp.EnviarPRODUCTOS();
         System.out.println("\n\n");
         System.out.println("\nSí pasó por aqui");
         for(int i = 0; mp.PRODUCTOS[i][9] != null; i++){
@@ -246,6 +247,11 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
             //p.SetDatos(""+r.getNOTA_REP(), mp.PRODUCTOS[i][9], mp.PRODUCTOS[i][7], Double.parseDouble("5"), Double.parseDouble("5"), Double.parseDouble(mp.PRODUCTOS[i][8]));
             System.out.println("\nRegistro no. "+i+":\n\nID de REPORTE: "+r.getNOTA_REP()+"   ID de PRODUCTO: "+mp.PRODUCTOS[i][9]+"   Cantidad: "+p.getCAN_PAR()+"   SubTotal: "+p.getSUBT_PAR()+"   IVA: "+p.getIVA_PAR()+"   Total: "+p.getTOT_PAR());
             p.SubirDatosPartidas();}
+        mp.Enviar();
+        mp.PRODUCTOS = new String[50][10];
+        mp.PRODUCTOSenviar = new String[50][10];
+        mp.jTextField_Total.setText("0");
+        mp.CargarTabla2(mp.Get_EnviarTabla());
         JOptionPane.showMessageDialog(null, "Registro añadido con éxito");
         dispose();
     }//GEN-LAST:event_jButton_ConfirmarMouseClicked
