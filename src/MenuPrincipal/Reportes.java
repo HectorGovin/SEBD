@@ -10,6 +10,9 @@ public class Reportes {
     
     public static final String URL = "jdbc:mysql://localhost:3306/sebd", USERNAME = "root", PASSWORD = "";
     
+    
+    MenuPrincipal mp = new MenuPrincipal();
+    
     int ID_REP, ID_USU, ID_CLIE;
     double TOTAL;
     String NOTA_REP, FP_REP, DATE_REP;

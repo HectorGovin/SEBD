@@ -252,6 +252,8 @@ public class MenuPrincipalCobroRapido extends javax.swing.JFrame {
         mp.PRODUCTOSenviar = new String[50][10];
         mp.jTextField_Total.setText("0");
         mp.CargarTabla2(mp.Get_EnviarTabla());
+        
+            mp.Limpiar();
         JOptionPane.showMessageDialog(null, "Registro añadido con éxito");
         dispose();
     }//GEN-LAST:event_jButton_ConfirmarMouseClicked

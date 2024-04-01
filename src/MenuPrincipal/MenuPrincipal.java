@@ -11,6 +11,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
     public static String[][] PRODUCTOS = new String[50][10];
     public static String[][] PRODUCTOSenviar = new String[50][10];
+    public static String[][] PRODUCTOSmodificar = new String[1][10];
+    
     int contadorProd;
     public static final String URL = "jdbc:mysql://localhost:3306/sebd", USERNAME = "root", PASSWORD = "";
     
@@ -65,9 +67,24 @@ public class MenuPrincipal extends javax.swing.JFrame {
         for(int x=0; PRODUCTOS[x][8]!=null; x++){
             sum+= Float.parseFloat(PRODUCTOS[x][8]);
         }
+        
+        System.out.println("\n");
+        
+        for(int x = 0; PRODUCTOS[x][0]!= null;x++){
+            System.out.print("PRODUCTO: "+(x+1)+"\n");
+            for(int y = 0; y<10; y++){
+                System.out.print(""+PRODUCTOS[x][y]+", ");
+            }
+            System.out.println("\n");
+        }
         jTextField_Total.setText(""+sum);
         ConsultaFolio();
         ValidarSubT_IVA();
+    }
+    
+    public void Limpiar(){
+        PRODUCTOS = new String[50][10];
+        PRODUCTOSenviar = new String[50][10];
     }
     
     public void CargarTabla2(javax.swing.JTable A){
@@ -182,7 +199,44 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     }       
     
+    private void EliminarPartida(){
+        System.out.println("\n"+contadorProd);
+        int row = tablaPRODUCTOS.getSelectedRow();
+        System.out.print("\nEl valor de SelectedRow es: "+row);
+        for(int x = 0; x<10; x++){
+            if(PRODUCTOS[row+1][x] != null){
+                for(int y=row; PRODUCTOS[y+1][x]!= null; y++){
+                    PRODUCTOS[y][x] = PRODUCTOS[y+1][x];
+                    PRODUCTOS[y+1][x] = null;
+                    PRODUCTOSenviar[y][x] = PRODUCTOSenviar[y+1][x];
+                    PRODUCTOSenviar[y+1][x] = null;
+                }
+            }else{
+                PRODUCTOS[row][x] = null;
+                PRODUCTOSenviar[row][x] = null;
+            }
+        }
+        contadorProd--;
+        CargarTabla();
+    }
     
+    private void ModificarPartida(){
+        ROWXD = tablaPRODUCTOS.getSelectedRow();
+        PRODUCTOSmodificar[0][0] = ""+ROWXD;
+        PRODUCTOSmodificar[0][1] = PRODUCTOS[ROWXD][2]; //DESCRIPCION
+        PRODUCTOSmodificar[0][2] = PRODUCTOS[ROWXD][1]; //SERIE
+        PRODUCTOSmodificar[0][3] = PRODUCTOS[ROWXD][7]; //CANTIDAD
+    }
+    
+    public static int ROWXD;
+    
+    public int EnviarRow(){
+        return ROWXD;
+    }
+    
+    public String[][] EnviarPRODUCTOSaModificar(){
+        return PRODUCTOSmodificar;
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -336,10 +390,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jButton_Modificar.setBackground(new java.awt.Color(255, 153, 51));
         jButton_Modificar.setText("MODIFICAR");
+        jButton_Modificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_ModificarMouseClicked(evt);
+            }
+        });
 
         jButton_ELIMINAR.setBackground(new java.awt.Color(204, 0, 0));
         jButton_ELIMINAR.setForeground(new java.awt.Color(255, 255, 255));
         jButton_ELIMINAR.setText("ELIMINAR");
+        jButton_ELIMINAR.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_ELIMINARMouseClicked(evt);
+            }
+        });
 
         jButton_Actualizar.setText("Actualizar");
         jButton_Actualizar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -594,8 +658,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_CobroClienteUMouseClicked
 
     private void jButton_ActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ActualizarMouseClicked
-        PRODUCTOS = new String[50][10];
-        PRODUCTOSenviar = new String[50][10];
+        
         CargarTabla();
     }//GEN-LAST:event_jButton_ActualizarMouseClicked
 
@@ -610,6 +673,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void jMenu_ReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_ReportesMouseClicked
         new ConsultaReportes().setVisible(true);
     }//GEN-LAST:event_jMenu_ReportesMouseClicked
+
+    private void jButton_ELIMINARMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ELIMINARMouseClicked
+        EliminarPartida();
+    }//GEN-LAST:event_jButton_ELIMINARMouseClicked
+
+    private void jButton_ModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ModificarMouseClicked
+        ModificarPartida();
+        new MenuPrincipalModificarPartida().setVisible(true);
+    }//GEN-LAST:event_jButton_ModificarMouseClicked
 
     /**
      * @param args the command line arguments

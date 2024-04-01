@@ -372,8 +372,7 @@ public class Productos {
         }
     }
     
-    
-        public void EliminarProducto(String paramID){
+    public void EliminarProducto(String paramID){
 
         setID_PROD(Integer.parseInt(paramID));
     

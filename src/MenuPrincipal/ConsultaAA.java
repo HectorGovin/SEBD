@@ -109,7 +109,7 @@ public class ConsultaAA extends javax.swing.JFrame {
         }
     }
     
-        private void BuscarPRODUCTOS(String buscar){
+    private void BuscarPRODUCTOS(String buscar){
         int i = 0;
         try{
             Connection con = null;

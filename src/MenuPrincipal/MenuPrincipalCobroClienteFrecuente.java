@@ -528,6 +528,8 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
             //System.out.println("\nRegistro no. "+i+":\n\nID de REPORTE: "+r.getNOTA_REP()+"   ID de PRODUCTO: "+mp.PRODUCTOS[i][9]+"   Cantidad: "+mp.PRODUCTOS[i][7]+"   SubTotal: "+Double.parseDouble("5")+"   IVA: "+Double.parseDouble("5")+"   Total: "+Double.parseDouble(mp.PRODUCTOS[i][8]));
             System.out.println("\nRegistro no. "+i+":\n\nID de REPORTE: "+r.getNOTA_REP()+"   ID de PRODUCTO: "+mp.PRODUCTOS[i][9]+"   Cantidad: "+p.getCAN_PAR()+"   SubTotal: "+p.getSUBT_PAR()+"   IVA: "+p.getIVA_PAR()+"   Total: "+p.getTOT_PAR());
             p.SubirDatosPartidas();}
+        
+            mp.Limpiar();
         JOptionPane.showMessageDialog(null, "Registro añadido con éxito");
         dispose();
     }//GEN-LAST:event_jButton_ConfirmarMouseClicked
