@@ -257,7 +257,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jButton_Servicios = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaPRODUCTOS = new javax.swing.JTable();
-        jButton_VentasHoy = new javax.swing.JButton();
+        jButton_VentasHoyFerreteria = new javax.swing.JButton();
         jButton_CobroClienteU = new javax.swing.JButton();
         jButton_CobroRapido = new javax.swing.JButton();
         jLabel_Subtotal = new javax.swing.JLabel();
@@ -268,6 +268,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jButton_Modificar = new javax.swing.JButton();
         jButton_ELIMINAR = new javax.swing.JButton();
         jButton_Actualizar = new javax.swing.JButton();
+        jButton_VentasHoyAA = new javax.swing.JButton();
         jLabel_Folio_S = new javax.swing.JLabel();
         jLabel_Folio = new javax.swing.JLabel();
         jButton_AñadirProducto = new javax.swing.JButton();
@@ -349,10 +350,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tablaPRODUCTOS);
 
-        jButton_VentasHoy.setText("VENTAS DE HOY");
-        jButton_VentasHoy.addMouseListener(new java.awt.event.MouseAdapter() {
+        jButton_VentasHoyFerreteria.setForeground(new java.awt.Color(102, 0, 0));
+        jButton_VentasHoyFerreteria.setText("VENTAS DE HOY");
+        jButton_VentasHoyFerreteria.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "FERRETERIA", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(153, 0, 0))); // NOI18N
+        jButton_VentasHoyFerreteria.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_VentasHoyMouseClicked(evt);
+                jButton_VentasHoyFerreteriaMouseClicked(evt);
             }
         });
 
@@ -412,6 +415,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButton_VentasHoyAA.setForeground(new java.awt.Color(0, 51, 102));
+        jButton_VentasHoyAA.setText("VENTAS DE HOY");
+        jButton_VentasHoyAA.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "AIRES ACONDICIONADOS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 51, 102))); // NOI18N
+        jButton_VentasHoyAA.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_VentasHoyAAMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel_FAS_AND_BOTTOMLayout = new javax.swing.GroupLayout(jPanel_FAS_AND_BOTTOM);
         jPanel_FAS_AND_BOTTOM.setLayout(jPanel_FAS_AND_BOTTOMLayout);
         jPanel_FAS_AND_BOTTOMLayout.setHorizontalGroup(
@@ -434,12 +446,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
                         .addComponent(jButton_Actualizar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
-                        .addComponent(jButton_VentasHoy, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 146, Short.MAX_VALUE)
-                        .addComponent(jButton_CobroClienteU)
+                        .addComponent(jButton_VentasHoyFerreteria, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_VentasHoyAA, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
+                        .addComponent(jButton_CobroClienteU)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_CobroRapido, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
                                 .addComponent(jLabel_Subtotal)
@@ -449,13 +463,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
                                 .addComponent(jLabel_Impuesto)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTextField_Impuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
+                        .addGap(20, 20, 20)
                         .addComponent(jTextField_Total, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel_FAS_AND_BOTTOMLayout.setVerticalGroup(
             jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
+            .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Ferreteria)
@@ -466,25 +480,25 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addComponent(jButton_Actualizar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
-                        .addComponent(jTextField_Total, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
-                        .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton_VentasHoyFerreteria, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_VentasHoyAA, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
                             .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel_Subtotal)
                                 .addComponent(jTextField_Subtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel_Impuesto)
-                                    .addComponent(jTextField_Impuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jButton_CobroClienteU, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton_CobroRapido, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton_VentasHoy, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(15, 15, 15))))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel_Impuesto)
+                                .addComponent(jTextField_Impuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton_CobroRapido, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                            .addComponent(jButton_CobroClienteU, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jTextField_Total, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
 
         jLabel_Folio_S.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
@@ -658,17 +672,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_CobroClienteUMouseClicked
 
     private void jButton_ActualizarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_ActualizarMouseClicked
-        
         CargarTabla();
     }//GEN-LAST:event_jButton_ActualizarMouseClicked
 
     private void jMenu_ClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_ClientesMouseClicked
         new ConsultaClientes().setVisible(true);
     }//GEN-LAST:event_jMenu_ClientesMouseClicked
-
-    private void jButton_VentasHoyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_VentasHoyMouseClicked
-        
-    }//GEN-LAST:event_jButton_VentasHoyMouseClicked
 
     private void jMenu_ReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_ReportesMouseClicked
         new ConsultaReportes().setVisible(true);
@@ -682,6 +691,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         ModificarPartida();
         new MenuPrincipalModificarPartida().setVisible(true);
     }//GEN-LAST:event_jButton_ModificarMouseClicked
+
+    private void jButton_VentasHoyAAMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_VentasHoyAAMouseClicked
+        new ConsultaReporteDelDiaAA().setVisible(true);
+    }//GEN-LAST:event_jButton_VentasHoyAAMouseClicked
+
+    private void jButton_VentasHoyFerreteriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_VentasHoyFerreteriaMouseClicked
+        new ConsultaReporteDelDiaFerreteria().setVisible(true);
+    }//GEN-LAST:event_jButton_VentasHoyFerreteriaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -728,7 +745,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton_Ferreteria;
     private javax.swing.JButton jButton_Modificar;
     private javax.swing.JButton jButton_Servicios;
-    private javax.swing.JButton jButton_VentasHoy;
+    private javax.swing.JButton jButton_VentasHoyAA;
+    private javax.swing.JButton jButton_VentasHoyFerreteria;
     private javax.swing.JLabel jLabel_FH_S;
     private javax.swing.JLabel jLabel_FechaHora;
     public javax.swing.JLabel jLabel_Folio;
