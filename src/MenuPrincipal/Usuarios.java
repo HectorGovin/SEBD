@@ -11,9 +11,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
 import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JPasswordField;
 import static javax.swing.UIManager.getString;
 import static javax.swing.UIManager.getInt;
 import javax.swing.table.DefaultTableModel;
@@ -172,5 +175,22 @@ public class Usuarios {
             JOptionPane.showMessageDialog(null,"No se pudo eliminar el usuario, error: "+ex.toString());
             
         }
-}
+    }
+        
+        public void RellenarComboBox(JComboBox combo){
+            String sql = "select * from usuarios";
+            Statement st;
+            Conexion objetoConexion = new Conexion();
+            Connection conexion = objetoConexion.conectar();
+            try{
+                
+                st = conexion.createStatement();
+                ResultSet rs = st.executeQuery(sql);
+                while(rs.next()){
+                    combo.addItem(rs.getString("NOM_USU"));
+                }
+            }catch(Exception ex){
+                JOptionPane.showMessageDialog(null,"Error: "+ex.toString());
+            }
+        }
 }

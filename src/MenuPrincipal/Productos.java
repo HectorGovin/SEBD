@@ -15,6 +15,7 @@ import com.itextpdf.text.pdf.Barcode128;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.PdfContentByte;
+import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,6 +30,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import static javax.swing.UIManager.getString;
 import static javax.swing.UIManager.getInt;
 import javax.swing.table.DefaultTableModel;
@@ -278,7 +280,7 @@ public class Productos {
                 JOptionPane.showMessageDialog(null, "Fila no encontrada");
             }
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(null, "Error de seleccion, error: "+ex.toString());
+            JOptionPane.showMessageDialog(null, "Error de seleccion, seleccione una fila válida \n\nError:"+ex.toString());
         }
     }
     
@@ -414,7 +416,15 @@ public class Productos {
         
         String consulta = "select * from productos";
         Statement st;
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File(paramCB+".pdf"));
         
+        int userSelection = fileChooser.showSaveDialog(null);
+        
+        if(userSelection == JFileChooser.APPROVE_OPTION){
+            File fileToSave = fileChooser.getSelectedFile();
+            String filePath = fileToSave.getAbsolutePath();
         
         try {
             
@@ -423,22 +433,37 @@ public class Productos {
             getString(paramCB);
             
             Document doc = new Document();
-            PdfWriter pdf = PdfWriter.getInstance(doc, new FileOutputStream(paramCB+".pdf"));
+            PdfWriter pdf = PdfWriter.getInstance(doc, new FileOutputStream(filePath));
             doc.open();
+
+            ColumnText column1 = new ColumnText(pdf.getDirectContent());
+            ColumnText column2 = new ColumnText(pdf.getDirectContent());
+            ColumnText column3 = new ColumnText(pdf.getDirectContent());
             
-            
+            column1.setSimpleColumn(36, 50, 150, 800);
+            column2.setSimpleColumn(350, 50, 236, 800);
+            column3.setSimpleColumn(550, 50, 436, 800);
 
             for(int i = 0; i < 12; i++){
-                
             Barcode128 code = new Barcode128();
             code.setCode(paramCB);
             img = code.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
             
-            doc.add(img);
+            Paragraph paragraph = new Paragraph(" ");
             
-            doc.add(new Paragraph(" "));
+            column1.addElement(img);
+            column1.addElement(paragraph);
             
+            column2.addElement(img);
+            column2.addElement(paragraph);
+            
+            column3.addElement(img);
+            column3.addElement(paragraph);
+                        
             }
+            column1.go();
+            column2.go();
+            column3.go();
             
             doc.close();
             
@@ -453,5 +478,5 @@ public class Productos {
         }
         
     }
-        
+   }     
 }

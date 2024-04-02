@@ -1,4 +1,5 @@
 package MenuPrincipal;
+import static MenuPrincipal.ConsultaServicios.getConection;
 import java.sql.*;
 import javax.swing.JTable;
 
@@ -38,14 +39,14 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
             PRODUCTOS,
             new String [] {
-                "CODIGO DE BARRAS", "SERIE", "DESCRIPCION", "$ GENERAL"
+                "ID", "DESCRIPCION", "$ GENERAL"
             }
             ));
         
         TableRowSorter<TableModel> OrdenarTabla = new TableRowSorter<TableModel>(new javax.swing.table.DefaultTableModel(
             PRODUCTOS,
             new String [] {
-                "CODIGO DE BARRAS", "SERIE", "DESCRIPCION", "$ GENERAL"
+                "ID", "DESCRIPCION", "$ GENERAL"
             }
             ));
         
@@ -53,12 +54,10 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
         
         TableColumn c;
         c = tablaPRODUCTOS.getColumnModel().getColumn(0);
-        c.setMaxWidth(120); c.setMinWidth(120); c.setResizable(false); 
+        c.setMaxWidth(50); c.setMinWidth(50); c.setResizable(false); 
         c = tablaPRODUCTOS.getColumnModel().getColumn(1);
-        c.setMaxWidth(70); c.setMinWidth(70); c.setResizable(false); 
-        c = tablaPRODUCTOS.getColumnModel().getColumn(2);
         c.setPreferredWidth(400); 
-        c = tablaPRODUCTOS.getColumnModel().getColumn(3);
+        c = tablaPRODUCTOS.getColumnModel().getColumn(2);
         c.setMaxWidth(90); c.setMinWidth(90); c.setResizable(false); 
     }
     
@@ -75,17 +74,17 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
             res = ps.executeQuery();
             
             if(res.next())
-                PRODUCTOS = new String[res.getInt("COUNT(ID_PROD)")][10];
+                PRODUCTOS = new String[res.getInt("COUNT(ID_PROD)")][3];
             
             ps = con.prepareStatement("SELECT * FROM PRODUCTOS WHERE CAT_PROD='SERVICIOS'");
             res = ps.executeQuery();
-            
+            int cero;
             while(res.next())
             {
-                PRODUCTOS[i][0] = ("" + res.getString("CODIGO_PROD"));
-                PRODUCTOS[i][1] = ("" + res.getString("SERIE_PROD"));
-                PRODUCTOS[i][2] = ("" + res.getString("DES_PROD"));
-                PRODUCTOS[i][3] = ("" + res.getString("PRG_PROD"));
+                cero = res.getInt("ID_PROD");
+                PRODUCTOS[i][0] = String.format("%04d", cero);
+                PRODUCTOS[i][1] = ("" + res.getString("DES_PROD"));
+                PRODUCTOS[i][2] = ("" + res.getString("PRG_PROD"));
                 i++;
             }
             
@@ -96,7 +95,39 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
         }
     }
     
-    
+    private void BuscarSERVICIOS(String buscar){
+        int i = 0;
+        try{
+            Connection con = null;
+            con = getConection();
+            
+            PreparedStatement ps;
+            ResultSet res;
+            
+            ps = con.prepareStatement("SELECT COUNT(ID_PROD) FROM PRODUCTOS WHERE CAT_PROD='SERVICIOS'");
+            res = ps.executeQuery();
+            
+            if(res.next())
+                PRODUCTOS = new String[res.getInt("COUNT(ID_PROD)")][3];
+            
+            ps = con.prepareStatement("SELECT * FROM PRODUCTOS WHERE DES_PROD LIKE '%"+buscar+"%' HAVING CAT_PROD='SERVICIOS'");
+            res = ps.executeQuery();
+            int cero;
+            while(res.next())
+            {
+                cero = res.getInt("ID_PROD");
+                PRODUCTOS[i][0] = String.format("%04d", cero);
+                PRODUCTOS[i][1] = ("" + res.getString("DES_PROD"));
+                PRODUCTOS[i][2] = ("" + res.getString("PRG_PROD"));
+                i++;
+            }
+            
+            CargarTabla();
+            
+        } catch(SQLException e){
+            System.out.println(e);
+        }
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -114,7 +145,6 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
         jButton_Agregar = new javax.swing.JButton();
         jButton_Salir = new javax.swing.JButton();
         jButton_Actualizar = new javax.swing.JButton();
-        jButton_Buscar = new javax.swing.JButton();
 
         setLocation(new java.awt.Point(0, 0));
 
@@ -126,6 +156,12 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
         jLabel_Buscar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel_Buscar.setForeground(new java.awt.Color(255, 255, 255));
         jLabel_Buscar.setText("Buscar producto:");
+
+        jTextField_Buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField_BuscarKeyReleased(evt);
+            }
+        });
 
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -179,13 +215,6 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
             }
         });
 
-        jButton_Buscar.setText("x");
-        jButton_Buscar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton_BuscarMouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel_OpcionesLayout = new javax.swing.GroupLayout(jPanel_Opciones);
         jPanel_Opciones.setLayout(jPanel_OpcionesLayout);
         jPanel_OpcionesLayout.setHorizontalGroup(
@@ -196,9 +225,7 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
                 .addComponent(jLabel_Buscar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jButton_Aires)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_Ferreteria)
@@ -210,7 +237,7 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
                 .addComponent(jButton_Agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(147, 147, 147)
                 .addComponent(jButton_Actualizar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 457, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 435, Short.MAX_VALUE)
                 .addComponent(jButton_Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
         );
@@ -223,10 +250,9 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
                     .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_Aires)
                     .addComponent(jButton_Ferreteria)
-                    .addComponent(jButton_Servicios)
-                    .addComponent(jButton_Buscar))
+                    .addComponent(jButton_Servicios))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                 .addGap(25, 25, 25)
                 .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -280,10 +306,6 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
         LeerPRODUCTOS();
     }//GEN-LAST:event_jButton_ActualizarActionPerformed
 
-    private void jButton_BuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_BuscarMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton_BuscarMouseClicked
-
     private void jButton_AiresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_AiresMouseClicked
         new MenuPrincipalConsultaAA().setVisible(true);
         this.setVisible(false);
@@ -293,6 +315,10 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
         new MenuPrincipalConsultaFerreteria().setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton_FerreteriaMouseClicked
+
+    private void jTextField_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyReleased
+    BuscarSERVICIOS(jTextField_Buscar.getText());
+    }//GEN-LAST:event_jTextField_BuscarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -340,7 +366,6 @@ public class MenuPrincipalConsultaServicios extends javax.swing.JFrame {
     private javax.swing.JButton jButton_Actualizar;
     private javax.swing.JButton jButton_Agregar;
     private javax.swing.JButton jButton_Aires;
-    private javax.swing.JButton jButton_Buscar;
     private javax.swing.JButton jButton_Ferreteria;
     private javax.swing.JButton jButton_Salir;
     private javax.swing.JButton jButton_Servicios;

@@ -128,11 +128,11 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
             jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_BarraLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addGroup(jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel_RegistroProd)
+                .addGroup(jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel_BarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel_Folio_S, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel_Folio)))
+                        .addComponent(jLabel_Folio))
+                    .addComponent(jLabel_RegistroProd))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -180,7 +180,7 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
         jPanel_IDLayout.setVerticalGroup(
             jPanel_IDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_IDLayout.createSequentialGroup()
-                .addComponent(jComboBox_Cliente, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                .addComponent(jComboBox_Cliente, javax.swing.GroupLayout.PREFERRED_SIZE, 28, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -201,7 +201,7 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
         jPanel_ID1Layout.setVerticalGroup(
             jPanel_ID1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_ID1Layout.createSequentialGroup()
-                .addComponent(jTextField_RFC, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                .addComponent(jTextField_RFC, javax.swing.GroupLayout.PREFERRED_SIZE, 28, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -243,7 +243,7 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
         jPanel_ID3Layout.setVerticalGroup(
             jPanel_ID3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_ID3Layout.createSequentialGroup()
-                .addComponent(jTextField_Email, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                .addComponent(jTextField_Email, javax.swing.GroupLayout.PREFERRED_SIZE, 28, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -262,7 +262,7 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
         jPanel_ID4Layout.setVerticalGroup(
             jPanel_ID4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_ID4Layout.createSequentialGroup()
-                .addComponent(jTextField_CP, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                .addComponent(jTextField_CP, javax.swing.GroupLayout.PREFERRED_SIZE, 28, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -281,7 +281,7 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
         jPanel_ID5Layout.setVerticalGroup(
             jPanel_ID5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_ID5Layout.createSequentialGroup()
-                .addComponent(jTextField_Telefono, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                .addComponent(jTextField_Telefono, javax.swing.GroupLayout.PREFERRED_SIZE, 28, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -429,7 +429,7 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
             .addGroup(jPanel_FondoLayout.createSequentialGroup()
                 .addComponent(jPanel_Barra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel_Opciones, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                .addComponent(jPanel_Opciones, javax.swing.GroupLayout.PREFERRED_SIZE, 410, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -511,20 +511,14 @@ public class MenuPrincipalCobroClienteFrecuente extends javax.swing.JFrame {
     public javax.swing.JPanel jPanel_ID3;
     public javax.swing.JPanel jPanel_ID4;
     public javax.swing.JPanel jPanel_ID5;
-    private javax.swing.JPanel jPanel_ID6;
-    private javax.swing.JPanel jPanel_ID7;
     public javax.swing.JPanel jPanel_ID8;
     public javax.swing.JPanel jPanel_ID9;
     private javax.swing.JPanel jPanel_Opciones;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextArea jTextArea_Direccion;
     private javax.swing.JTextArea jTextArea_DireccionFiscal;
     private javax.swing.JTextArea jTextArea_RegimenFiscal;

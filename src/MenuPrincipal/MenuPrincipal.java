@@ -253,6 +253,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 jButton_CobroRapidoMouseClicked(evt);
             }
         });
+        jButton_CobroRapido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_CobroRapidoActionPerformed(evt);
+            }
+        });
 
         jLabel_Subtotal.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel_Subtotal.setForeground(new java.awt.Color(255, 255, 255));
@@ -515,6 +520,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void jMenu_ClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu_ClientesMouseClicked
     new ConsultaClientes().setVisible(true);
     }//GEN-LAST:event_jMenu_ClientesMouseClicked
+
+    private void jButton_CobroRapidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CobroRapidoActionPerformed
+    ImpresionTicket Ticket = new ImpresionTicket();
+    Ticket.Ticket();
+    }//GEN-LAST:event_jButton_CobroRapidoActionPerformed
 
     /**
      * @param args the command line arguments
