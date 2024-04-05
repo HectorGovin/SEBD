@@ -13,6 +13,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static String[][] PRODUCTOSenviar = new String[50][10];
     public static String[][] PRODUCTOSmodificar = new String[1][10];
     
+    int lastSelect;
     int contadorProd;
     boolean validadorCB;
     
@@ -270,6 +271,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         jPanel_Fondo = new javax.swing.JPanel();
         jPanel_FHG = new javax.swing.JPanel();
         jLabel_FH_S = new javax.swing.JLabel();
@@ -297,6 +299,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jButton_ELIMINAR = new javax.swing.JButton();
         jButton_Actualizar = new javax.swing.JButton();
         jButton_VentasHoyAA = new javax.swing.JButton();
+        jButton_CantidadMenos = new javax.swing.JButton();
+        jButton_CantidadMas = new javax.swing.JButton();
+        jTextField_Cantidad = new javax.swing.JTextField();
         jLabel_Folio_S = new javax.swing.JLabel();
         jLabel_Folio = new javax.swing.JLabel();
         jButton_AñadirProducto = new javax.swing.JButton();
@@ -306,8 +311,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenu_Clientes = new javax.swing.JMenu();
         jMenu_Usuarios = new javax.swing.JMenu();
 
+        jButton1.setText("jButton1");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         jPanel_Fondo.setBackground(new java.awt.Color(243, 255, 242));
         jPanel_Fondo.setToolTipText("");
@@ -377,6 +384,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
             }
         ));
+        tablaPRODUCTOS.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaPRODUCTOSMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaPRODUCTOS);
 
         jButton_VentasHoyFerreteria.setForeground(new java.awt.Color(102, 0, 0));
@@ -453,6 +465,24 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jButton_CantidadMenos.setText("-");
+        jButton_CantidadMenos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_CantidadMenosMouseClicked(evt);
+            }
+        });
+
+        jButton_CantidadMas.setText("+");
+        jButton_CantidadMas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_CantidadMasMouseClicked(evt);
+            }
+        });
+
+        jTextField_Cantidad.setEditable(false);
+        jTextField_Cantidad.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField_Cantidad.setText("0");
+
         javax.swing.GroupLayout jPanel_FAS_AND_BOTTOMLayout = new javax.swing.GroupLayout(jPanel_FAS_AND_BOTTOM);
         jPanel_FAS_AND_BOTTOM.setLayout(jPanel_FAS_AND_BOTTOMLayout);
         jPanel_FAS_AND_BOTTOMLayout.setHorizontalGroup(
@@ -462,23 +492,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
-                        .addComponent(jButton_AireAcondicionado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Ferreteria)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Servicios)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Modificar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_ELIMINAR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Actualizar)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
                         .addComponent(jButton_VentasHoyFerreteria, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_VentasHoyAA, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
                         .addComponent(jButton_CobroClienteU)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_CobroRapido, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -493,8 +510,27 @@ public class MenuPrincipal extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTextField_Impuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(20, 20, 20)
-                        .addComponent(jTextField_Total, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(jTextField_Total, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(jPanel_FAS_AND_BOTTOMLayout.createSequentialGroup()
+                        .addComponent(jButton_AireAcondicionado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_Ferreteria)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_Servicios)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_Modificar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_ELIMINAR)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_Actualizar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton_CantidadMenos)
+                        .addGap(5, 5, 5)
+                        .addComponent(jTextField_Cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_CantidadMas)
+                        .addGap(15, 15, 15))))
         );
         jPanel_FAS_AND_BOTTOMLayout.setVerticalGroup(
             jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -506,9 +542,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addComponent(jButton_Ferreteria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton_Modificar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton_ELIMINAR, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton_Actualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton_Actualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton_CantidadMenos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton_CantidadMas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextField_Cantidad))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_FAS_AND_BOTTOMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -623,7 +662,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel_Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        getContentPane().add(jPanel_Fondo);
 
         jMenu_Productos.setText("Productos");
         jMenu_Productos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -730,6 +769,44 @@ public class MenuPrincipal extends javax.swing.JFrame {
             jTextField_Producto.setText("");
     }//GEN-LAST:event_jButton_AñadirProductoMouseClicked
 
+    private void tablaPRODUCTOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPRODUCTOSMouseClicked
+        if(PRODUCTOS[tablaPRODUCTOS.getSelectedRow()][7] == null){
+            jTextField_Cantidad.setText(""+0);
+        }else{
+            jTextField_Cantidad.setText(""+PRODUCTOS[tablaPRODUCTOS.getSelectedRow()][7]);
+            lastSelect = tablaPRODUCTOS.getSelectedRow();
+        }
+        
+    }//GEN-LAST:event_tablaPRODUCTOSMouseClicked
+
+    private void jButton_CantidadMenosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_CantidadMenosMouseClicked
+        int res = Integer.parseInt(jTextField_Cantidad.getText());
+        int mas = 1;
+        if(res > 1){
+            mas=res-1;
+            PRODUCTOS[lastSelect][7] = ""+mas;
+            jTextField_Cantidad.setText(""+PRODUCTOS[lastSelect][7]);
+            
+            PRODUCTOS[lastSelect][8] = ""+(Float.parseFloat(PRODUCTOS[lastSelect][5]) * Float.parseFloat(PRODUCTOS[lastSelect][7])); 
+            PRODUCTOSenviar[lastSelect][2]=PRODUCTOS[lastSelect][8];
+            CargarTabla();
+        }
+    }//GEN-LAST:event_jButton_CantidadMenosMouseClicked
+
+    private void jButton_CantidadMasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_CantidadMasMouseClicked
+        int res = Integer.parseInt(jTextField_Cantidad.getText());
+        int mas = 0;
+        if(res > 0){
+            mas=res+1;
+            PRODUCTOS[lastSelect][7] = ""+mas;
+            jTextField_Cantidad.setText(""+PRODUCTOS[lastSelect][7]);
+            
+            PRODUCTOS[lastSelect][8] = ""+(Float.parseFloat(PRODUCTOS[lastSelect][5]) * Float.parseFloat(PRODUCTOS[lastSelect][7])); 
+            PRODUCTOSenviar[lastSelect][2]=PRODUCTOS[lastSelect][8];
+            CargarTabla();
+        }
+    }//GEN-LAST:event_jButton_CantidadMasMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -766,9 +843,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton_Actualizar;
     private javax.swing.JButton jButton_AireAcondicionado;
     private javax.swing.JButton jButton_AñadirProducto;
+    private javax.swing.JButton jButton_CantidadMas;
+    private javax.swing.JButton jButton_CantidadMenos;
     private javax.swing.JButton jButton_CobroClienteU;
     private javax.swing.JButton jButton_CobroRapido;
     private javax.swing.JButton jButton_ELIMINAR;
@@ -796,6 +876,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel_Fondo;
     private javax.swing.JPanel jPanel_Productos;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField_Cantidad;
     private javax.swing.JTextField jTextField_Impuesto;
     private javax.swing.JTextField jTextField_Producto;
     private javax.swing.JTextField jTextField_Subtotal;
