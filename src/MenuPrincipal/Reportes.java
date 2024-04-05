@@ -87,5 +87,4 @@ public class Reportes {
             JOptionPane.showMessageDialog(null, "No se pudo mostrar la tabla, error: "+ex.toString());
         }
     }
-    
 }

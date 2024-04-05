@@ -13,6 +13,7 @@ public class ConsultaReportes extends javax.swing.JFrame {
     String[][] data = new String[10][7];
     
     public String[][] REPORTES;
+    public String[][] PARTIDAS;
     
     public static final String URL = "jdbc:mysql://localhost:3306/sebd";
     public static final String USERNAME = "root";
@@ -41,6 +42,56 @@ public class ConsultaReportes extends javax.swing.JFrame {
         CargarFechas();
     }
     
+    private void CargarPartidas(){
+        try{
+            Connection con = getConection();
+            
+            int fila = tablaPRODUCTOS.getSelectedRow();
+            
+            int nota = Integer.parseInt(REPORTES[fila][0]);
+            
+            String Note = REPORTES[fila][0];
+            System.out.println(Note);
+            
+            PreparedStatement ps;
+            ResultSet res;
+            
+            ps = con.prepareStatement("SELECT COUNT(REPORTES.ID_REP) FROM PRODUCTOS JOIN PARTIDAS ON PRODUCTOS.ID_PROD = PARTIDAS.ID_PROD JOIN REPORTES ON PARTIDAS.ID_REP = REPORTES.ID_REP WHERE REPORTES.NOTA_REP='"+Note+"'");
+            res = ps.executeQuery();
+            
+            if(res.next())
+                PARTIDAS = new String[res.getInt("COUNT(REPORTES.ID_REP)")][10];
+            
+            ps = con.prepareStatement("SELECT REPORTES.NOTA_REP, PRODUCTOS.DES_PROD, PARTIDAS.CAN_PAR, PARTIDAS.SUBT_PAR, PARTIDAS.IVA_PAR, PARTIDAS.TOT_PAR FROM PRODUCTOS JOIN PARTIDAS ON PRODUCTOS.ID_PROD = PARTIDAS.ID_PROD JOIN REPORTES ON PARTIDAS.ID_REP = REPORTES.ID_REP WHERE REPORTES.NOTA_REP='"+Note+"'");
+            res = ps.executeQuery();
+            int i = 0;
+            while(res.next())
+            {
+                PARTIDAS[i][0] = (""+(i+1));
+                PARTIDAS[i][1] = ("" + res.getString("DES_PROD"));
+                PARTIDAS[i][2] = ("" + res.getString("CAN_PAR"));
+                PARTIDAS[i][3] = ("" + res.getString("SUBT_PAR"));
+                PARTIDAS[i][4] = ("" + res.getString("IVA_PAR"));
+                PARTIDAS[i][5] = ("" + res.getString("TOT_PAR"));
+                i++;
+            }
+            jLabel_Folio.setText(Note);
+            CtablaREPORTES();
+            
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+    }
+    
+    private void CtablaREPORTES(){
+        tablaREPORTES.setModel(new javax.swing.table.DefaultTableModel(
+            PARTIDAS,
+            new String [] {
+                "NO. DE PRODUCTO", "PRODUCTO", "CANTIDAD", "SUB TOTAL", "IVA", "TOTAL"
+            }
+            ));
+    }
+    
     private void CargarFechas(){
         try{
             Connection con = getConection();
@@ -48,17 +99,14 @@ public class ConsultaReportes extends javax.swing.JFrame {
             PreparedStatement ps;
             ResultSet res;
             
-            /*ps = con.prepareStatement("SELECT COUNT(ID_PROD) FROM PRODUCTOS WHERE CAT_PROD='AA' OR CAT_PROD='FERRETERIA'");
-            res = ps.executeQuery();
-            
-            if(res.next())
-                PRODUCTOS = new String[res.getInt("COUNT(ID_PROD)")][10];*/
-            
             ps = con.prepareStatement("SELECT DISTINCT DATE_REP FROM `reportes` WHERE 1;");
             res = ps.executeQuery();
             
             while(res.next())
                 {jComboBox_Fechas.addItem("" + res.getString("DATE_REP"));}
+            
+            jComboBox_Fechas.setSelectedIndex(-1);
+            
         }catch(SQLException e){
             System.out.println(e);
         }
@@ -71,26 +119,25 @@ public class ConsultaReportes extends javax.swing.JFrame {
             PreparedStatement ps;
             ResultSet res;
             
-            String FechaSeleccionada = ""+jComboBox_Fechas.getSelectedItem();
-            System.out.println(FechaSeleccionada);
+            String Date = ""+jComboBox_Fechas.getSelectedItem();
+            System.out.println(Date);
             
-            ps = con.prepareStatement("SELECT COUNT(ID_REP) FROM REPORTES WHERE DATE_REP='"+FechaSeleccionada+"'");
+            ps = con.prepareStatement("SELECT COUNT(DISTINCT ID_REP) FROM REPORTES WHERE DATE_REP='"+Date+"'");
             res = ps.executeQuery();
             
             if(res.next())
-                REPORTES = new String[res.getInt("COUNT(ID_REP)")][10];
+                REPORTES = new String[res.getInt("COUNT(DISTINCT ID_REP)")][10];
             
-            ps = con.prepareStatement("SELECT r.ID_REP, u.NOM_USU, c.NOM_CLIE, r.NOTA_REP, r.FP_REP, r.TOTAL_REP FROM `reportes` r LEFT JOIN `usuarios` u on r.ID_USU = u.ID_USU LEFT JOIN `Clientes` c ON r.ID_CLIE = c.ID_CLIE WHERE DATE_REP='"+FechaSeleccionada+"'");
+            ps = con.prepareStatement("SELECT DISTINCT REPORTES.NOTA_REP, USUARIOS.NOM_USU, CLIENTES.NOM_CLIE, REPORTES.FP_REP, REPORTES.TOTAL_REP FROM REPORTES JOIN USUARIOS ON REPORTES.ID_USU = USUARIOS.ID_USU JOIN CLIENTES ON REPORTES.ID_CLIE = CLIENTES.ID_CLIE WHERE REPORTES.DATE_REP='"+Date+"'");
             res = ps.executeQuery();
             int i = 0;
             while(res.next())
             {
-                REPORTES[i][0] = ("" + res.getString("r.ID_REP"));
+                REPORTES[i][0] = ("" + res.getString("NOTA_REP"));
                 REPORTES[i][1] = ("" + res.getString("NOM_USU"));
                 REPORTES[i][2] = ("" + res.getString("NOM_CLIE"));
-                REPORTES[i][3] = ("" + res.getString("NOTA_REP"));
-                REPORTES[i][4] = ("" + res.getString("FP_REP"));
-                REPORTES[i][5] = ("" + res.getString("TOTAL_REP"));
+                REPORTES[i][3] = ("" + res.getString("FP_REP"));
+                REPORTES[i][4] = ("" + res.getString("TOTAL_REP"));
                 i++;
             }
         CargarTabla();
@@ -103,161 +150,11 @@ public class ConsultaReportes extends javax.swing.JFrame {
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
             REPORTES,
             new String [] {
-                "ID", "EMPLEADO", "CLIENTE", "NOTA", "FORMA DE PAGO", "TOTAL"
+                "NOTA", "EMPLEADO", "CLIENTE", "FORMA DE PAGO", "TOTAL"
             }
             ));
     }
     
-    /*
-    private void CargarTabla(){
-        
-        tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
-            PRODUCTOS,
-            new String [] {
-                "ID", "COD DE BARRAS", "SERIE", "CATEGORIA", "DESCRIPCION", "$ GENERAL", "$ TECNICO", "U.M", "DIM", "STOCK"
-            }
-            ));
-        
-        TableRowSorter<TableModel> OrdenarTabla = new TableRowSorter<TableModel>(new javax.swing.table.DefaultTableModel(
-            PRODUCTOS,
-            new String [] {
-                "ID", "COD DE BARRAS", "SERIE", "CATEGORIA", "DESCRIPCION", "$ GENERAL", "$ TECNICO", "U.M" ,"DIM", "STOCK"
-            }
-            ));
-        
-        tablaPRODUCTOS.setRowSorter(OrdenarTabla);
-        
-        TableColumn c;
-               c = tablaPRODUCTOS.getColumnModel().getColumn(0);
-        c.setMaxWidth(50); c.setMinWidth(50); c.setResizable(false); 
-        c = tablaPRODUCTOS.getColumnModel().getColumn(1);
-        c.setMaxWidth(120); c.setMinWidth(120); c.setResizable(false); 
-        c = tablaPRODUCTOS.getColumnModel().getColumn(2);
-        c.setMaxWidth(70); c.setMinWidth(70); c.setResizable(false); 
-        c = tablaPRODUCTOS.getColumnModel().getColumn(3);
-        c.setMaxWidth(110); c.setMinWidth(110); c.setResizable(false); 
-        c = tablaPRODUCTOS.getColumnModel().getColumn(4);
-        c.setPreferredWidth(500);
-        for(int cx = 5; cx<10;cx++){
-            c = tablaPRODUCTOS.getColumnModel().getColumn(cx);
-            c.setMaxWidth(80); c.setMinWidth(80); c.setResizable(false); 
-        }
-    }
-    
-    private void LeerPRODUCTOS(){
-        int i = 0;
-        try{
-            Connection con = null;
-            con = getConection();
-            
-            PreparedStatement ps;
-            ResultSet res;
-            
-            ps = con.prepareStatement("SELECT COUNT(ID_PROD) FROM PRODUCTOS WHERE CAT_PROD='AA' OR CAT_PROD='FERRETERIA'");
-            res = ps.executeQuery();
-            
-            if(res.next())
-                PRODUCTOS = new String[res.getInt("COUNT(ID_PROD)")][10];
-            
-            ps = con.prepareStatement("SELECT * FROM PRODUCTOS WHERE CAT_PROD='AA' OR CAT_PROD='FERRETERIA'");
-            res = ps.executeQuery();
-            int cero;
-            String zero;
-            while(res.next())
-            {
-                cero = res.getInt("ID_PROD");
-                PRODUCTOS[i][0] = String.format("%04d", cero);
-                PRODUCTOS[i][1] = ("" + res.getString("CODIGO_PROD"));
-                PRODUCTOS[i][2] = ("" + res.getString("SERIE_PROD"));
-                PRODUCTOS[i][3] = ("" + res.getString("CAT_PROD"));                
-                PRODUCTOS[i][4] = ("" + res.getString("DES_PROD"));
-                PRODUCTOS[i][5] = ("" + res.getString("PRG_PROD"));
-                PRODUCTOS[i][6] = ("" + res.getString("PRT_PROD"));
-                PRODUCTOS[i][7] = ("" + res.getString("UM_PROD"));
-                PRODUCTOS[i][8] = ("" + res.getString("DIM_PROD"));
-                cero = res.getInt("STOCK_PROD");
-                PRODUCTOS[i][9] = String.format("%04d", cero);
-                i++;
-            }
-            CargarTabla();
-            
-        } catch(SQLException e){
-            System.out.println(e);
-        }
-    }
-    
-        private void BuscarPRODUCTOS(String buscar){
-        int i = 0;
-        try{
-            Connection con = null;
-            con = getConection();
-            
-            PreparedStatement ps;
-            ResultSet res;
-            
-            ps = con.prepareStatement("SELECT COUNT(ID_PROD) FROM PRODUCTOS WHERE CAT_PROD='AA' OR CAT_PROD='FERRETERIA'");
-            res = ps.executeQuery();
-            
-            if(res.next())
-                PRODUCTOS = new String[res.getInt("COUNT(ID_PROD)")][10];
-            
-            ps = con.prepareStatement("SELECT * FROM PRODUCTOS WHERE CODIGO_PROD LIKE '%"+buscar+"%' OR DES_PROD LIKE '%"+buscar+"%' HAVING CAT_PROD='AA' OR CAT_PROD='FERRETERIA'");
-            res = ps.executeQuery();
-            int cero;
-            String zero;
-            while(res.next())
-            {
-                cero = res.getInt("ID_PROD");
-                PRODUCTOS[i][0] = String.format("%04d", cero);
-                PRODUCTOS[i][1] = ("" + res.getString("CODIGO_PROD"));
-                PRODUCTOS[i][2] = ("" + res.getString("SERIE_PROD"));
-                PRODUCTOS[i][3] = ("" + res.getString("CAT_PROD"));                
-                PRODUCTOS[i][4] = ("" + res.getString("DES_PROD"));
-                PRODUCTOS[i][5] = ("" + res.getString("PRG_PROD"));
-                PRODUCTOS[i][6] = ("" + res.getString("PRT_PROD"));
-                PRODUCTOS[i][7] = ("" + res.getString("UM_PROD"));
-                PRODUCTOS[i][8] = ("" + res.getString("DIM_PROD"));
-                cero = res.getInt("STOCK_PROD");
-                PRODUCTOS[i][9] = String.format("%04d", cero);
-                i++;
-            }
-            CargarTabla();
-            
-        } catch(SQLException e){
-            System.out.println(e);
-        }
-    }
-    
-    public void eliminar(){
-        int row = tablaPRODUCTOS.getSelectedRow();
-        String value = tablaPRODUCTOS.getModel().getValueAt(row, 0).toString();
-        
-        Productos ObjetoProductos = new Productos();
-        ObjetoProductos.EliminarProducto(value);
-    }
-            
-    public void actualizar(){
-        LeerPRODUCTOS();
-    }      
-    
-    public void seleccionar(){
-        Productos objetoProductos = new Productos();
-        objetoProductos.SeleccionarProductos(tablaPRODUCTOS, jTextField_ID, jTextField_CB, jTextField_Serie, jComboBox_Categoria, jTextField_UM, jTextArea, jTextField_PG, jTextField_PT, jTextField_DIM, jTextField_STOCK);
-    }
-    
-    public void modificar(){
-        Productos objetoProductos = new Productos();
-        objetoProductos.ModificarProducto(jTextField_ID, jTextField_CB, jTextField_Serie, jComboBox_Categoria, jTextField_UM, jTextArea, jTextField_PG, jTextField_PT, jTextField_DIM, jTextField_STOCK);
-    }
-    
-    public void cb(){
-        int row = tablaPRODUCTOS.getSelectedRow();
-        String value = tablaPRODUCTOS.getModel().getValueAt(row, 1).toString();
-        
-        Productos ObjetoProductos = new Productos();
-        ObjetoProductos.CB(value);
-    }
-    */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -269,8 +166,10 @@ public class ConsultaReportes extends javax.swing.JFrame {
         tablaPRODUCTOS = new javax.swing.JTable();
         jButton_Busqueda = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tablaPRODUCTOS1 = new javax.swing.JTable();
+        tablaREPORTES = new javax.swing.JTable();
         jComboBox_Fechas = new javax.swing.JComboBox<>();
+        jLabel_Buscar1 = new javax.swing.JLabel();
+        jLabel_Folio = new javax.swing.JLabel();
 
         setLocation(new java.awt.Point(0, 0));
 
@@ -309,7 +208,7 @@ public class ConsultaReportes extends javax.swing.JFrame {
             }
         });
 
-        tablaPRODUCTOS1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaREPORTES.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -320,28 +219,47 @@ public class ConsultaReportes extends javax.swing.JFrame {
 
             }
         ));
-        tablaPRODUCTOS1.getTableHeader().setReorderingAllowed(false);
-        tablaPRODUCTOS1.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablaREPORTES.getTableHeader().setReorderingAllowed(false);
+        tablaREPORTES.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaPRODUCTOS1MouseClicked(evt);
+                tablaREPORTESMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(tablaPRODUCTOS1);
+        jScrollPane2.setViewportView(tablaREPORTES);
+
+        jLabel_Buscar1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel_Buscar1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel_Buscar1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel_Buscar1.setText("Detalles de FOLIO");
+        jLabel_Buscar1.setToolTipText("");
+
+        jLabel_Folio.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel_Folio.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel_Folio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel_Folio.setText("0000");
+        jLabel_Folio.setToolTipText("");
 
         javax.swing.GroupLayout jPanel_OpcionesLayout = new javax.swing.GroupLayout(jPanel_Opciones);
         jPanel_Opciones.setLayout(jPanel_OpcionesLayout);
         jPanel_OpcionesLayout.setHorizontalGroup(
             jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel_Buscar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox_Fechas, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton_Busqueda)
-                .addContainerGap(122, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
+                .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel_Buscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox_Fechas, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton_Busqueda))
+                    .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
+                        .addGap(213, 213, 213)
+                        .addComponent(jLabel_Buscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel_Folio, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel_OpcionesLayout.setVerticalGroup(
             jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,7 +271,11 @@ public class ConsultaReportes extends javax.swing.JFrame {
                     .addComponent(jComboBox_Fechas, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel_Buscar1)
+                    .addComponent(jLabel_Folio))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(59, 59, 59))
         );
@@ -364,7 +286,7 @@ public class ConsultaReportes extends javax.swing.JFrame {
             jPanel_FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_FondoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel_Opciones, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
+                .addComponent(jPanel_Opciones, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel_FondoLayout.setVerticalGroup(
@@ -390,12 +312,12 @@ public class ConsultaReportes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tablaPRODUCTOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPRODUCTOSMouseClicked
-
+        CargarPartidas();
     }//GEN-LAST:event_tablaPRODUCTOSMouseClicked
 
-    private void tablaPRODUCTOS1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPRODUCTOS1MouseClicked
+    private void tablaREPORTESMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaREPORTESMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_tablaPRODUCTOS1MouseClicked
+    }//GEN-LAST:event_tablaREPORTESMouseClicked
 
     private void jButton_BusquedaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_BusquedaMouseClicked
         LeerFechaSeleccionada();
@@ -471,11 +393,13 @@ public class ConsultaReportes extends javax.swing.JFrame {
     private javax.swing.JButton jButton_Busqueda;
     private javax.swing.JComboBox<String> jComboBox_Fechas;
     private javax.swing.JLabel jLabel_Buscar;
+    private javax.swing.JLabel jLabel_Buscar1;
+    private javax.swing.JLabel jLabel_Folio;
     private javax.swing.JPanel jPanel_Fondo;
     private javax.swing.JPanel jPanel_Opciones;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tablaPRODUCTOS;
-    public javax.swing.JTable tablaPRODUCTOS1;
+    public javax.swing.JTable tablaPRODUCTOS;
+    public javax.swing.JTable tablaREPORTES;
     // End of variables declaration//GEN-END:variables
 }

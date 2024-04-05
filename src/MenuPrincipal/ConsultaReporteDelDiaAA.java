@@ -54,26 +54,25 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
             PreparedStatement ps;
             ResultSet res;
             
-            ps = con.prepareStatement("SELECT COUNT(DISTINCT REPORTES.ID_REP) FROM REPORTES LEFT JOIN PARTIDAS ON REPORTES.ID_REP = PARTIDAS.ID_REP LEFT JOIN PRODUCTOS ON PRODUCTOS.ID_PROD = PARTIDAS.ID_PROD WHERE REPORTES.DATE_REP = '04-02-2024' && PRODUCTOS.CAT_PROD = 'AA';");
+            ps = con.prepareStatement("SELECT COUNT(REPORTES.ID_REP) FROM REPORTES LEFT JOIN PARTIDAS ON REPORTES.ID_REP = PARTIDAS.ID_REP LEFT JOIN PRODUCTOS ON PRODUCTOS.ID_PROD = PARTIDAS.ID_PROD WHERE (PRODUCTOS.CAT_PROD = 'AA' OR PRODUCTOS.CAT_PROD = 'SERVICIOS') && REPORTES.DATE_REP='"+date+"'");
             
             res = ps.executeQuery();
             
             System.out.println("\n"+date);
             
             if(res.next())
-                REPORTES = new String[res.getInt("COUNT(DISTINCT REPORTES.ID_REP)")][10];
+                REPORTES = new String[(res.getInt("COUNT(REPORTES.ID_REP)")*2)][10];
             
-            ps = con.prepareStatement("SELECT DISTINCT rep.NOTA_REP, usu.NOM_USU, cli.NOM_CLIE, rep.FP_REP, rep.TOTAL_REP FROM `reportes` rep LEFT JOIN `usuarios` usu on rep.ID_USU = usu.ID_USU LEFT JOIN `clientes` cli on rep.ID_CLIE = cli.ID_CLIE LEFT JOIN `partidas` par on rep.ID_REP = par.ID_REP LEFT JOIN `productos` prod on prod.ID_PROD = par.ID_PROD WHERE rep.DATE_REP = '"+date+"' && prod.CAT_PROD = 'AA'");
+            ps = con.prepareStatement("SELECT DISTINCT REPORTES.NOTA_REP, PRODUCTOS.DES_PROD, PARTIDAS.CAN_PAR, PARTIDAS.TOT_PAR FROM REPORTES JOIN PARTIDAS ON PARTIDAS.ID_REP = REPORTES.ID_REP JOIN PRODUCTOS ON PRODUCTOS.ID_PROD = PARTIDAS.ID_PROD WHERE (PRODUCTOS.CAT_PROD='SERVICIOS' OR PRODUCTOS.CAT_PROD='AA') && REPORTES.DATE_REP='"+date+"'");
             res = ps.executeQuery();
             int i = 0;
             while(res.next())
             {
-                REPORTES[i][0] = ("" + res.getString("rep.NOTA_REP"));
-                REPORTES[i][1] = ("" + res.getString("usu.NOM_USU"));
-                REPORTES[i][2] = ("" + res.getString("cli.NOM_CLIE"));
-                REPORTES[i][3] = ("" + res.getString("rep.FP_REP"));
-                REPORTES[i][4] = ("" + res.getString("rep.TOTAL_REP"));
-                i++;
+                REPORTES[i][0] = ("" + res.getString("REPORTES.NOTA_REP"));
+                REPORTES[i][1] = ("" + res.getString("PRODUCTOS.DES_PROD"));
+                REPORTES[i][2] = ("" + res.getString("PARTIDAS.CAN_PAR"));
+                REPORTES[i][3] = ("" + res.getString("PARTIDAS.TOT_PAR"));
+                i++; i++;
             }
         CargarTabla();
         }catch(SQLException e){
@@ -85,7 +84,7 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
             REPORTES,
             new String [] {
-                "FOLIO", "EMPLEADO", "CLIENTE", "FORMA DE PAGO", "TOTAL"
+                "FOLIO", "PRODUCTO", "CANTIDAD", "TOTAL"
             }
             ));
     }
@@ -247,13 +246,13 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel_Fondo = new javax.swing.JPanel();
         jPanel_Opciones = new javax.swing.JPanel();
-        jLabel_Buscar = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaPRODUCTOS = new javax.swing.JTable();
         jButton_PDF = new javax.swing.JButton();
         jButton_Salir = new javax.swing.JButton();
         jLabel_Ferreteria = new javax.swing.JLabel();
         jLabel_Fecha = new javax.swing.JLabel();
+        jLabel_Buscar = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -264,10 +263,6 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
 
         jPanel_Opciones.setBackground(new java.awt.Color(153, 188, 133));
         jPanel_Opciones.setPreferredSize(new java.awt.Dimension(1280, 720));
-
-        jLabel_Buscar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jLabel_Buscar.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel_Buscar.setText("Reportes con fecha de:");
 
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -291,6 +286,11 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
         jButton_PDF.setText("Generar PDF");
 
         jButton_Salir.setText("Salir");
+        jButton_Salir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_SalirMouseClicked(evt);
+            }
+        });
 
         jLabel_Ferreteria.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel_Ferreteria.setForeground(new java.awt.Color(153, 0, 0));
@@ -301,6 +301,10 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
         jLabel_Fecha.setForeground(new java.awt.Color(255, 255, 255));
         jLabel_Fecha.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel_Fecha.setText("fecha");
+
+        jLabel_Buscar.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel_Buscar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel_Buscar.setText("Reportes con fecha de:");
 
         javax.swing.GroupLayout jPanel_OpcionesLayout = new javax.swing.GroupLayout(jPanel_Opciones);
         jPanel_Opciones.setLayout(jPanel_OpcionesLayout);
@@ -314,11 +318,11 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
                 .addComponent(jButton_PDF, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(114, 114, 114))
             .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
-                .addGap(62, 62, 62)
+                .addGap(36, 36, 36)
                 .addComponent(jLabel_Buscar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(jLabel_Ferreteria, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
@@ -328,15 +332,15 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
                 .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel_Ferreteria, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel_Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel_Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_PDF, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel_FondoLayout = new javax.swing.GroupLayout(jPanel_Fondo);
@@ -358,8 +362,12 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tablaPRODUCTOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPRODUCTOSMouseClicked
-
+        
     }//GEN-LAST:event_tablaPRODUCTOSMouseClicked
+
+    private void jButton_SalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_SalirMouseClicked
+        this.dispose();
+    }//GEN-LAST:event_jButton_SalirMouseClicked
 
     /**
      * @param args the command line arguments

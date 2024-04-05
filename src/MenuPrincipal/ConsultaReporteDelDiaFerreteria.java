@@ -54,25 +54,24 @@ public class ConsultaReporteDelDiaFerreteria extends javax.swing.JFrame {
             PreparedStatement ps;
             ResultSet res;
             
-            ps = con.prepareStatement("SELECT COUNT(DISTINCT REPORTES.ID_REP) FROM REPORTES LEFT JOIN PARTIDAS ON REPORTES.ID_REP = PARTIDAS.ID_REP LEFT JOIN PRODUCTOS ON PRODUCTOS.ID_PROD = PARTIDAS.ID_PROD WHERE REPORTES.DATE_REP = '04-02-2024' && PRODUCTOS.CAT_PROD = 'FERRETERIA';");
+            ps = con.prepareStatement("SELECT COUNT(REPORTES.ID_REP) FROM REPORTES LEFT JOIN PARTIDAS ON REPORTES.ID_REP = PARTIDAS.ID_REP LEFT JOIN PRODUCTOS ON PRODUCTOS.ID_PROD = PARTIDAS.ID_PROD WHERE PRODUCTOS.CAT_PROD = 'FERRETERIA'  && REPORTES.DATE_REP='"+date+"'");
             
             res = ps.executeQuery();
             
             System.out.println("\n"+date);
             
             if(res.next())
-                REPORTES = new String[res.getInt("COUNT(DISTINCT REPORTES.ID_REP)")][10];
+                REPORTES = new String[(2*res.getInt("COUNT(REPORTES.ID_REP)"))][10];
             
-            ps = con.prepareStatement("SELECT DISTINCT rep.NOTA_REP, usu.NOM_USU, cli.NOM_CLIE, rep.FP_REP, rep.TOTAL_REP FROM `reportes` rep LEFT JOIN `usuarios` usu on rep.ID_USU = usu.ID_USU LEFT JOIN `clientes` cli on rep.ID_CLIE = cli.ID_CLIE LEFT JOIN `partidas` par on rep.ID_REP = par.ID_REP LEFT JOIN `productos` prod on prod.ID_PROD = par.ID_PROD WHERE rep.DATE_REP = '"+date+"' && prod.CAT_PROD = 'FERRETERIA'");
+            ps = con.prepareStatement("SELECT DISTINCT REPORTES.NOTA_REP, PRODUCTOS.DES_PROD, PARTIDAS.CAN_PAR, PARTIDAS.TOT_PAR FROM REPORTES JOIN PARTIDAS ON PARTIDAS.ID_REP = REPORTES.ID_REP JOIN PRODUCTOS ON PRODUCTOS.ID_PROD = PARTIDAS.ID_PROD WHERE PRODUCTOS.CAT_PROD = 'FERRETERIA' && REPORTES.DATE_REP='"+date+"'");
             res = ps.executeQuery();
             int i = 0;
             while(res.next())
-            {
-                REPORTES[i][0] = ("" + res.getString("rep.NOTA_REP"));
-                REPORTES[i][1] = ("" + res.getString("usu.NOM_USU"));
-                REPORTES[i][2] = ("" + res.getString("cli.NOM_CLIE"));
-                REPORTES[i][3] = ("" + res.getString("rep.FP_REP"));
-                REPORTES[i][4] = ("" + res.getString("rep.TOTAL_REP"));
+            {   
+                REPORTES[i][0] = ("" + res.getString("REPORTES.NOTA_REP"));
+                REPORTES[i][1] = ("" + res.getString("PRODUCTOS.DES_PROD"));
+                REPORTES[i][2] = ("" + res.getString("PARTIDAS.CAN_PAR"));
+                REPORTES[i][3] = ("" + res.getString("PARTIDAS.TOT_PAR"));
                 i++;
             }
         CargarTabla();
@@ -85,7 +84,7 @@ public class ConsultaReporteDelDiaFerreteria extends javax.swing.JFrame {
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
             REPORTES,
             new String [] {
-                "FOLIO", "EMPLEADO", "CLIENTE", "FORMA DE PAGO", "TOTAL"
+                "FOLIO", "PRODUCTO", "CANTIDAD", "TOTAL"
             }
             ));
     }
@@ -265,8 +264,8 @@ public class ConsultaReporteDelDiaFerreteria extends javax.swing.JFrame {
         jPanel_Opciones.setBackground(new java.awt.Color(153, 188, 133));
         jPanel_Opciones.setPreferredSize(new java.awt.Dimension(1280, 720));
 
-        jLabel_Buscar.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jLabel_Buscar.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel_Buscar.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel_Buscar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel_Buscar.setText("Reportes con fecha de:");
 
         tablaPRODUCTOS.setModel(new javax.swing.table.DefaultTableModel(
@@ -291,6 +290,11 @@ public class ConsultaReporteDelDiaFerreteria extends javax.swing.JFrame {
         jButton_PDF.setText("Generar PDF");
 
         jButton_Salir.setText("Salir");
+        jButton_Salir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton_SalirMouseClicked(evt);
+            }
+        });
 
         jLabel_Ferreteria.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel_Ferreteria.setForeground(new java.awt.Color(153, 0, 0));
@@ -306,7 +310,7 @@ public class ConsultaReporteDelDiaFerreteria extends javax.swing.JFrame {
         jPanel_Opciones.setLayout(jPanel_OpcionesLayout);
         jPanel_OpcionesLayout.setHorizontalGroup(
             jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_OpcionesLayout.createSequentialGroup()
                 .addGap(117, 117, 117)
                 .addComponent(jButton_Salir)
@@ -314,35 +318,36 @@ public class ConsultaReporteDelDiaFerreteria extends javax.swing.JFrame {
                 .addComponent(jButton_PDF, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(114, 114, 114))
             .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
-                .addGap(62, 62, 62)
+                .addGap(50, 50, 50)
                 .addComponent(jLabel_Buscar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel_Ferreteria, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
         jPanel_OpcionesLayout.setVerticalGroup(
             jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_OpcionesLayout.createSequentialGroup()
-                .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_Ferreteria, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel_Ferreteria, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel_Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel_OpcionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_PDF, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel_FondoLayout = new javax.swing.GroupLayout(jPanel_Fondo);
         jPanel_Fondo.setLayout(jPanel_FondoLayout);
         jPanel_FondoLayout.setHorizontalGroup(
             jPanel_FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel_Opciones, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
+            .addComponent(jPanel_Opciones, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
         );
         jPanel_FondoLayout.setVerticalGroup(
             jPanel_FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -357,8 +362,12 @@ public class ConsultaReporteDelDiaFerreteria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tablaPRODUCTOSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPRODUCTOSMouseClicked
-
+        
     }//GEN-LAST:event_tablaPRODUCTOSMouseClicked
+
+    private void jButton_SalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_SalirMouseClicked
+        this.dispose();
+    }//GEN-LAST:event_jButton_SalirMouseClicked
 
     /**
      * @param args the command line arguments

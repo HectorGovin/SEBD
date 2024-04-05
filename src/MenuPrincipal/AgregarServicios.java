@@ -70,8 +70,6 @@ public class AgregarServicios extends javax.swing.JFrame {
         CargarID();
     }
     
-
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -286,7 +284,7 @@ public class AgregarServicios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_CancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_CancelarMouseClicked
-    this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jButton_CancelarMouseClicked
 
     private void jButton_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuardarActionPerformed
