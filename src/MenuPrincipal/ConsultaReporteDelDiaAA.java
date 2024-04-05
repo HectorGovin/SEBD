@@ -68,11 +68,20 @@ public class ConsultaReporteDelDiaAA extends javax.swing.JFrame {
             int i = 0;
             while(res.next())
             {
+                /*String xd = ""+res.getString("REPORTES.NOTA_REP");
+                
+                if(REPORTES[1][0] == null){
+                    
+                }else if(xd.equals(REPORTES[i-1][0])){
+                    
+                }else{
+                    i++;
+                }*/
                 REPORTES[i][0] = ("" + res.getString("REPORTES.NOTA_REP"));
                 REPORTES[i][1] = ("" + res.getString("PRODUCTOS.DES_PROD"));
                 REPORTES[i][2] = ("" + res.getString("PARTIDAS.CAN_PAR"));
                 REPORTES[i][3] = ("" + res.getString("PARTIDAS.TOT_PAR"));
-                i++; i++;
+                i++;
             }
         CargarTabla();
         }catch(SQLException e){
